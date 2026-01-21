@@ -40,5 +40,7 @@ services:
     volumes:
       - ./frontend:/app                 # Synchronisiert lokalen Code mit dem Container (Live-Reload)
       - /app/node_modules               # Schützt die installierten Pakete im Container vor Überschreiben
-    depends_on:
-      - backend                         # Startet erst, wenn das Backend bereit ist
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    # depends_on:
+    #   - backend                         # Startet erst, wenn das Backend bereit ist
