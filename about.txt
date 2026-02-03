@@ -1,0 +1,21 @@
+spring-boot-starter-web	    Erstellt die REST-Endpunkte für Schüler, Lehrer und Kurse.
+spring-boot-starter-data-jpa	Speichert Daten (Noten, Stundenpläne) in der Datenbank.
+progressdb	Die Verbindung zu deiner MySQL-Datenbank.
+spring-boot-starter-security	Regelt den Zugriff (z.B. nur Lehrer dürfen Noten eintragen).
+lombok	Entfernt Code-Müll (generiert Getter/Setter automatisch).
+spring-boot-starter-validation	Prüft, ob z.B. ein Geburtsdatum eines Schülers sinnvoll ist.
+
+axios: 
+Wie wir schon besprochen haben, ist das dein Werkzeug, um mit Spring Boot zu sprechen. Es ist einfacher zu handhaben als die eingebaute fetch-Methode.
+
+react-router-dom: 
+Unverzichtbar! Da deine App viele Seiten haben wird (Login, Dashboard, Schülerliste, Notenübersicht), brauchst du diesen Router, um zwischen den Ansichten zu wechseln.
+
+lucide-react: 
+Ein wunderschönes und leichtes Icon-Set. Du wirst Icons für "Löschen", "Speichern", "Schüler" oder "Kalender" brauchen.
+
+@mui/material (Material UI): 
+Der Goldstandard für Business-Apps. Es bietet fertige Tabellen, Buttons und Eingabefelder, die wie bei Google aussehen.
+
+react-toastify: 
+Damit kannst du kleine Erfolgs- oder Fehlermeldungen (Popups) oben rechts anzeigen lassen (z.B. "Note erfolgreich gespeichert!").

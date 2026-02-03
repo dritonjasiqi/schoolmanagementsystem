@@ -1,0 +1,46 @@
+services:
+  db:                                   # Name des Dienstes
+    image: postgres:15-alpine           # Nutzt  Postgres-Image (leichtgewichtige Version)
+    container_name: school-db           # Name des laufenden Containers
+    environment:                        # Umgebungsvariablen für die Datenbank:
+      POSTGRES_USER: postgres           # Admin-Benutzername
+      POSTGRES_PASSWORD: password123    # Datenbank-Passwort
+      POSTGRES_DB: school_db            # Name der zu erstellenden Datenbank
+    ports:                              # Öffnet Port 5432 (Lokal : Container)
+      - "5432:5432"
+
+  backend:
+    build: ./backend                    # Erstellt Image aus dem Dockerfile im Ordner ./backend
+    container_name: school-backend      # Name des Containers
+    ports:                              # Backend über Port 8080 erreichbar
+      - "8080:8080"
+    depends_on:                          # Startet erst, wenn die Datenbank bereit ist
+      - db
+    environment:                        # Verbindungseinstellungen für Spring Boot:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/school_db # DB-Adresse
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: password123
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update # Tabellen automatisch anpassen/erstellen
+
+  pgadmin:
+    image: dpage/pgadmin4               # Web-Oberfläche zur Datenbankverwaltung
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com # Login-Email für pgAdmin
+      PGADMIN_DEFAULT_PASSWORD: admin        # Login-Passwort für pgAdmin
+    ports:                              # Erreichbar im Browser unter localhost:5050
+      - "5050:80"
+    depends_on:                         # Wartet auf die Datenbank
+      - db
+
+  frontend:
+    build: ./frontend                   # Erstellt Image aus dem Ordner ./frontend
+    container_name: school-frontend     # Name des Containers
+    ports:                              # Frontend über Port 5173 erreichbar
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app                 # Synchronisiert lokalen Code mit dem Container (Live-Reload)
+      - /app/node_modules               # Schützt die installierten Pakete im Container vor Überschreiben
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    # depends_on:
+    #   - backend                         # Startet erst, wenn das Backend bereit ist
