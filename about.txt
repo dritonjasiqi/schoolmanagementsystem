@@ -14,8 +14,35 @@ Unverzichtbar! Da deine App viele Seiten haben wird (Login, Dashboard, Schülerl
 lucide-react: 
 Ein wunderschönes und leichtes Icon-Set. Du wirst Icons für "Löschen", "Speichern", "Schüler" oder "Kalender" brauchen.
 
-@mui/material (Material UI): 
-Der Goldstandard für Business-Apps. Es bietet fertige Tabellen, Buttons und Eingabefelder, die wie bei Google aussehen.
 
-react-toastify: 
-Damit kannst du kleine Erfolgs- oder Fehlermeldungen (Popups) oben rechts anzeigen lassen (z.B. "Note erfolgreich gespeichert!").
+Idee
+Online School Management dass in Teilen geteilt basiert auf Module ist .
+Die Leute sind in 3 Category geteilt
+	Admin 
+	Co Admin
+
+	Staff
+	Dozenten
+	Tutors
+
+	und Studierende.
+
+Admins konnen Staff hinzufugen und/oder entfernen sowie Modulen fugen, entfernen, bearbeiten.
+Staff kann maximal 3 Module aktiv haben und 10 Tuturos
+Jede Tutor kann maximal in ein module aktiv sein.
+
+Studierende wenn sie zugelassen sind bekommen ein einmalig Passwort dass sie es geandern mussen.
+Sie bekommen Module basiert auf Ihre Fach aber konnen beliebig Module besuchen kostenlos/Paid.
+
+
+Wenn ein Student zugelassen wird bekommt er ein 15 Tage Zeitraum in dem er bezahlen muss oder er wird entfernt werden.
+
+
+In Module werden nach Titel die Dinge geteilt. Skript Testen Hausaufgaben und so. Die Testen konnen online gemacht werden und mit AI bewertet nach feste Losungen.
+
+Wenn am Ende test 60% erledigt ist je 10% wird die Zertifikate mit Bewertungnote erstellt.
+Die Prüfungzulassung zu bekommen mussen 40% der Hausaufgaben gemacht.
+
+
+
+
