@@ -1,25 +1,22 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Layout from './components/Layout';
+import Dashboard from './pages/Dashboard';
+import Users from './pages/Users';
+import Settings from './pages/Settings';
 
-import React, { useState} from 'react';
-import './App.css';
-import Sidebar from './components/layout/Sidebar';
-import Header from './components/layout/Header';
-
-function App() {
-
-  const  [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [currectPage, setCurrentPage] = useState("dashboard");
+export default function App() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50  transition-all duration-500 ">
-      <div className="flex h-screen overflow-hidden">
-        <Sidebar collapsed = {sidebarCollapsed} onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
-        currentPage =  {currectPage} 
-        onPageChange = {setCurrentPage}/>
-        <div className='flex-1 flex flex-col overflow-hidden'>
-          <Header />
-        </div>
-      </div>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Dashboard />} />
+          <Route path="users" element={<Users />} />
+          <Route path="settings" element={<Settings />} />
+          {/* Placeholder routes for dropdown sub-items */}
+          <Route path="products/*" element={<div className="p-4">Products Module</div>} />
+          <Route path="reports/*" element={<div className="p-4">Reports Module</div>} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
-
-export default App

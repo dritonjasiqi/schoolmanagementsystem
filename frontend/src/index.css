@@ -1,0 +1,75 @@
+body {
+  background-color: #f4f6f9;
+  font-family: system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+}
+
+.topbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 60px;
+  z-index: 1050;
+}
+
+.sidebar {
+  position: fixed;
+  top: 60px; left: 0;
+  width: 250px;
+  height: calc(100vh - 60px);
+  background: #ffffff;
+  z-index: 1045;
+  transition: transform 0.3s ease-in-out;
+  overflow-y: auto;
+  box-shadow: 2px 0 8px rgba(0,0,0,0.05);
+}
+
+.sidebar-backdrop {
+  position: fixed;
+  top: 60px; left: 0;
+  width: 100vw;
+  height: calc(100vh - 60px);
+  background: rgba(0,0,0,0.4);
+  z-index: 1040;
+}
+
+.main-content {
+  padding-top: 60px;
+  min-height: 100vh;
+  transition: margin-left 0.3s ease-in-out;
+}
+
+/* Mobile & Tablet First: Sidebar overlays, main content doesn't shift */
+.sidebar.closed { transform: translateX(-100%); }
+.sidebar.open { transform: translateX(0); }
+.main-content { margin-left: 0; }
+
+/* Desktop: Pushes content natively to prevent overlay blockage */
+@media (min-width: 992px) {
+  .main-content.sidebar-open { margin-left: 250px; }
+  .main-content.sidebar-closed { margin-left: 0; }
+}
+
+/* Sidebar Nav Links */
+.sidebar .nav-link {
+  color: #495057;
+  padding: 0.6rem 1rem;
+  margin: 0.2rem 0.8rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  text-decoration: none;
+}
+.sidebar .nav-link:hover {
+  background-color: #f8f9fa;
+  color: #0d6efd;
+}
+.sidebar .nav-link.active {
+  background-color: #0d6efd;
+  color: white;
+}
+.sidebar .dropdown-toggle::after {
+  margin-left: auto;
+}
