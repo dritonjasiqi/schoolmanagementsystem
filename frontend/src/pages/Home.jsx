@@ -126,6 +126,117 @@ export default function Home() {
                     </div>
                 </div>
             </section>
+            {/* COURSES SECTION */}
+            <section id="courses" className="py-5">
+                <div className="container py-5">
+                    <div className="text-center mb-5">
+                        <h2 className="fw-bold">Most Popular Courses</h2>
+                        <p className="text-muted">Expand your knowledge with our top-rated modules</p>
+                    </div>
+                    <div className="row g-4">
+                        {courses.map((course) => (
+                            <div className="col-md-6 col-lg-3" key={course.id}>
+                                <div className="card h-100 hover-card shadow-sm">
+                                    <img src={course.img} className="card-img-top" alt={course.title} style={{ height: '200px', objectFit: 'cover' }} />
+                                    <div className="card-body d-flex flex-column">
+                                        <div className="d-flex justify-content-between align-items-start mb-2">
+                                            <h5 className="card-title fw-bold mb-0">{course.title}</h5>
+                                        </div>
+                                        <p className="card-text text-muted flex-grow-1 mt-2">{course.desc}</p>
+                                        <div className="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
+                                            <span className={`fw-bold fs-5 ${course.price === 'Free' ? 'text-success' : 'text-primary'}`}>
+                                                {course.price}
+                                            </span>
+                                            <button className="btn btn-outline-primary btn-sm btn-modern">
+                                                View Course
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* CONTACT SECTION */}
+            <section id="contact" className="py-5 bg-white">
+                <div className="container py-5">
+                    <div className="row justify-content-center">
+                        <div className="col-lg-6 col-md-8">
+                            <div className="text-center mb-4">
+                                <h2 className="fw-bold">Get in Touch</h2>
+                                <p className="text-muted">Have any questions? We'd love to hear from you.</p>
+                            </div>
+                            <form className="shadow-sm p-4 p-md-5 rounded-4 border bg-light">
+                                <div className="mb-3">
+                                    <label htmlFor="name" className="form-label fw-semibold">Full Name</label>
+                                    <input type="text" className="form-control form-control-lg bg-white" id="name" placeholder="John Doe" />
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="email" className="form-label fw-semibold">Email Address</label>
+                                    <input type="email" className="form-control form-control-lg bg-white" id="email" placeholder="name@example.com" />
+                                </div>
+                                <div className="mb-4">
+                                    <label htmlFor="message" className="form-label fw-semibold">Message</label>
+                                    <textarea className="form-control bg-white" id="message" rows="4" placeholder="How can we help you?"></textarea>
+                                </div>
+                                <button type="submit" className="btn btn-primary w-100 btn-lg btn-modern fw-bold">
+                                    Send Message <i className="bi bi-send ms-2"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            {/* FOOTER */}
+            <footer className="bg-dark text-white py-5">
+                <div className="container">
+                    <div className="row gy-4">
+                        <div className="col-lg-4 col-md-6">
+                            <h4 className="fw-bold text-primary mb-3"><i className="bi bi-mortarboard-fill me-2"></i>EduManage</h4>
+                            <p className="text-light opacity-75 pe-lg-4">
+                                Providing top-tier educational tools and management systems to institutions worldwide.
+                            </p>
+                        </div>
+
+                        <div className="col-lg-2 col-md-6">
+                            <h5 className="mb-3">Quick Links</h5>
+                            <ul className="list-unstyled">
+                                <li className="mb-2"><a href="#home" className="text-decoration-none text-light opacity-75 hover-white">Home</a></li>
+                                <li className="mb-2"><a href="#about" className="text-decoration-none text-light opacity-75 hover-white">About Us</a></li>
+                                <li className="mb-2"><a href="#courses" className="text-decoration-none text-light opacity-75 hover-white">Courses</a></li>
+                                <li className="mb-2"><a href="#pricing" className="text-decoration-none text-light opacity-75 hover-white">Pricing</a></li>
+                            </ul>
+                        </div>
+
+                        <div className="col-lg-3 col-md-6">
+                            <h5 className="mb-3">Contact Info</h5>
+                            <ul className="list-unstyled text-light opacity-75">
+                                <li className="mb-2"><i className="bi bi-geo-alt me-2"></i> 123 University Blvd, Tech City</li>
+                                <li className="mb-2"><i className="bi bi-envelope me-2"></i> support@edumanage.com</li>
+                                <li className="mb-2"><i className="bi bi-telephone me-2"></i> +1 (555) 123-4567</li>
+                            </ul>
+                        </div>
+
+                        <div className="col-lg-3 col-md-6">
+                            <h5 className="mb-3">Follow Us</h5>
+                            <div className="d-flex gap-3">
+                                <a href="#!" className="text-white fs-4 opacity-75 hover-white"><i className="bi bi-facebook"></i></a>
+                                <a href="#!" className="text-white fs-4 opacity-75 hover-white"><i className="bi bi-twitter-x"></i></a>
+                                <a href="#!" className="text-white fs-4 opacity-75 hover-white"><i className="bi bi-instagram"></i></a>
+                                <a href="#!" className="text-white fs-4 opacity-75 hover-white"><i className="bi bi-linkedin"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="row mt-5 pt-4 border-top border-secondary">
+                        <div className="col-12 text-center text-light opacity-50">
+                            <p className="mb-0">&copy; {new Date().getFullYear()} EduManage System. All rights reserved.</p>
+                        </div>
+                    </div>
+                </div>
+            </footer>
         </div>
     );
 }
