@@ -15,10 +15,10 @@ export default function Sidebar({ isOpen, closeMobile }) {
       <div className="d-flex flex-column py-3">
         
         {/* Normal Links */}
-        <NavLink to="/" className="nav-link" end onClick={closeMobile}>
+        <NavLink to="/dashboard" className="nav-link" end onClick={closeMobile}>
           <Speedometer2 /> Dashboard
         </NavLink>
-        <NavLink to="/users" className="nav-link" onClick={closeMobile}>
+        <NavLink to="/dashboard/users" className="nav-link" onClick={closeMobile}>
           <People /> Users
         </NavLink>
         
@@ -31,10 +31,10 @@ export default function Sidebar({ isOpen, closeMobile }) {
         </div>
         <Collapse in={openMenus['products']}>
           <div className="ps-4 pe-2">
-            <NavLink to="/products/list" className="nav-link small py-2 mt-1" onClick={closeMobile}>
+            <NavLink to="/dashboard/products/list" className="nav-link small py-2 mt-1" onClick={closeMobile}>
               <Circle size={8} /> Product List
             </NavLink>
-            <NavLink to="/products/add" className="nav-link small py-2" onClick={closeMobile}>
+            <NavLink to="/dashboard/products/add" className="nav-link small py-2" onClick={closeMobile}>
               <Circle size={8} /> Add Product
             </NavLink>
           </div>
@@ -49,17 +49,17 @@ export default function Sidebar({ isOpen, closeMobile }) {
         </div>
         <Collapse in={openMenus['reports']}>
           <div className="ps-4 pe-2">
-            <NavLink to="/reports/sales" className="nav-link small py-2 mt-1" onClick={closeMobile}>
+            <NavLink to="/dashboard/reports/sales" className="nav-link small py-2 mt-1" onClick={closeMobile}>
               <Circle size={8} /> Sales Data
             </NavLink>
-            <NavLink to="/reports/traffic" className="nav-link small py-2" onClick={closeMobile}>
+            <NavLink to="/dashboard/reports/traffic" className="nav-link small py-2" onClick={closeMobile}>
               <Circle size={8} /> Web Traffic
             </NavLink>
           </div>
         </Collapse>
 
         {/* Normal Link */}
-        <NavLink to="/settings" className="nav-link mt-2" onClick={closeMobile}>
+        <NavLink to="/dashboard/settings" className="nav-link mt-2" onClick={closeMobile}>
           <Gear /> Settings
         </NavLink>
 

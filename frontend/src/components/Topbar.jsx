@@ -8,7 +8,7 @@ export default function Topbar({ toggleSidebar }) {
         <Button variant="light" className="me-3 border-0 bg-transparent" onClick={toggleSidebar}>
           <List size={26} />
         </Button>
-        <Navbar.Brand href="/" className="fw-bold text-primary m-0">DashKit</Navbar.Brand>
+        <Navbar.Brand href="/" className="fw-bold text-primary m-0">Aurora School</Navbar.Brand>
         
         <Nav className="ms-auto">
           <NavDropdown 

@@ -3,18 +3,20 @@ import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
 import Users from './pages/Users';
 import Settings from './pages/Settings';
+import Home from './pages/Home';
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Layout />}>
+        <Route path="/" element={<Home />} />
+        <Route path="/dashboard" element={<Layout />}>
           <Route index element={<Dashboard />} />
-          <Route path="users" element={<Users />} />
-          <Route path="settings" element={<Settings />} />
+          <Route path="/dashboard/users" element={<Users />} />
+          <Route path="/dashboard/settings" element={<Settings />} />
           {/* Placeholder routes for dropdown sub-items */}
-          <Route path="products/*" element={<div className="p-4">Products Module</div>} />
-          <Route path="reports/*" element={<div className="p-4">Reports Module</div>} />
+          <Route path="/dashboard/products/*" element={<div className="p-4">Products Module</div>} />
+          <Route path="/dashboard/reports/*" element={<div className="p-4">Reports Module</div>} />
         </Route>
       </Routes>
     </BrowserRouter>
