@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { FaFacebook, FaInstagram, FaLinkedin, FaTwitter } from 'react-icons/fa';
 
 export default function Home() {
     const [isNavCollapsed, setIsNavCollapsed] = useState(true);
@@ -20,6 +21,18 @@ export default function Home() {
         { id: 5, name: 'Michael Brown', text: 'Helped me track my grades and courses flawlessly.', stars: 4 },
         { id: 6, name: 'Jessica Davis', text: 'A must-have platform for modern education and e-learning.', stars: 5 }
     ];
+
+    // Reviews Carousel Logic
+    const [activeSlide, setActiveSlide] = useState(0);
+    const totalSlides = Math.ceil(reviews.length / 2); // 2 reviews per slide = 3 slides
+
+    const nextSlide = () => {
+        setActiveSlide((prev) => (prev + 1) % totalSlides);
+    };
+
+    const prevSlide = () => {
+        setActiveSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
+    };
 
     return (
         <div>
@@ -85,15 +98,16 @@ export default function Home() {
                             </p>
                         </div>
                     </div>
-
-                    {/* Reviews Carousel */}
-                    <div id="reviewsCarousel" className="carousel slide pb-5" data-bs-ride="carousel">
+                    {/* Reviews Custom React Carousel */}
+                    <div id="reviewsCarousel" className="carousel slide pb-5">
                         <div className="carousel-inner px-2 px-md-5">
-                            {/* Grouping reviews into slides (2 per slide for demo, adapting via Bootstrap grid inside) */}
-                            {[0, 2, 4].map((startIndex, idx) => (
-                                <div className={`carousel-item ${idx === 0 ? 'active' : ''}`} key={idx}>
+                            {Array.from({ length: totalSlides }).map((_, slideIndex) => (
+                                <div
+                                    className={`carousel-item ${slideIndex === activeSlide ? 'active d-block' : 'd-none'}`}
+                                    key={slideIndex}
+                                >
                                     <div className="row justify-content-center g-4">
-                                        {reviews.slice(startIndex, startIndex + 2).map((review) => (
+                                        {reviews.slice(slideIndex * 2, slideIndex * 2 + 2).map((review) => (
                                             <div className="col-md-6" key={review.id}>
                                                 <div className="review-card d-flex flex-column justify-content-between">
                                                     <p className="text-muted fst-italic mb-4">"{review.text}"</p>
@@ -115,11 +129,12 @@ export default function Home() {
                                 </div>
                             ))}
                         </div>
-                        <button className="carousel-control-prev" type="button" data-bs-target="#reviewsCarousel" data-bs-slide="prev">
+                        {/* Custom Carousel Controls */}
+                        <button className="carousel-control-prev" type="button" onClick={prevSlide}>
                             <span className="carousel-control-prev-icon shadow" aria-hidden="true"></span>
                             <span className="visually-hidden">Previous</span>
                         </button>
-                        <button className="carousel-control-next" type="button" data-bs-target="#reviewsCarousel" data-bs-slide="next">
+                        <button className="carousel-control-next" type="button" onClick={nextSlide}>
                             <span className="carousel-control-next-icon shadow" aria-hidden="true"></span>
                             <span className="visually-hidden">Next</span>
                         </button>
@@ -222,10 +237,18 @@ export default function Home() {
                         <div className="col-lg-3 col-md-6">
                             <h5 className="mb-3">Follow Us</h5>
                             <div className="d-flex gap-3">
-                                <a href="#!" className="text-white fs-4 opacity-75 hover-white"><i className="bi bi-facebook"></i></a>
-                                <a href="#!" className="text-white fs-4 opacity-75 hover-white"><i className="bi bi-twitter-x"></i></a>
-                                <a href="#!" className="text-white fs-4 opacity-75 hover-white"><i className="bi bi-instagram"></i></a>
-                                <a href="#!" className="text-white fs-4 opacity-75 hover-white"><i className="bi bi-linkedin"></i></a>
+                                <a href="#!" className="text-white fs-4 opacity-75 social-icon" aria-label="Facebook">
+                                    <FaFacebook />
+                                </a>
+                                <a href="#!" className="text-white fs-4 opacity-75 social-icon" aria-label="Twitter">
+                                    <FaTwitter />
+                                </a>
+                                <a href="#!" className="text-white fs-4 opacity-75 social-icon" aria-label="Instagram">
+                                    <FaInstagram />
+                                </a>
+                                <a href="#!" className="text-white fs-4 opacity-75 social-icon" aria-label="LinkedIn">
+                                    <FaLinkedin />
+                                </a>
                             </div>
                         </div>
                     </div>
