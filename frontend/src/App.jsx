@@ -4,6 +4,7 @@ import Dashboard from './pages/Dashboard';
 import Users from './pages/Users';
 import Settings from './pages/Settings';
 import Home from './pages/Home';
+import LoginAndSignup from './pages/LoginAndSignup';
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
           <Route path="/dashboard/products/*" element={<div className="p-4">Products Module</div>} />
           <Route path="/dashboard/reports/*" element={<div className="p-4">Reports Module</div>} />
         </Route>
+        <Route path="/login" element={<LoginAndSignup />} />
       </Routes>
     </BrowserRouter>
   );
