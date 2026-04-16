@@ -62,7 +62,8 @@ const courses = [
 ];
 
 export default function Pricing() {
-    return (<div>
+    return (
+    <div>
         <Navbar />
         <div className="bg-light min-vh-90 py-5 mt-5">
             {/* Custom CSS injected for hover effects and clean transitions */}
@@ -155,5 +156,6 @@ export default function Pricing() {
             </div>
         </div>
         <Footer />
-    </div>);
+    </div>
+    );
 }

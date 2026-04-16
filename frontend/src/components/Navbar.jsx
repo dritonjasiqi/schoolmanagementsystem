@@ -15,13 +15,13 @@ export default function Navbar(){
                     </button>
                     <div className={`${isNavCollapsed ? 'collapse' : ''} navbar-collapse`} id="navbarNav">
                         <ul className="navbar-nav ms-auto align-items-center">
-                            <li className="nav-item me-3"><a className="nav-link text-dark fw-semibold" href="#home"><i className="bi bi-house-door me-1"></i>Home</a></li>
-                            <li className="nav-item me-3"><a className="nav-link text-dark fw-semibold" href="#about"><i className="bi bi-info-circle me-1"></i>About</a></li>
-                            <li className="nav-item me-3"><a className="nav-link text-dark fw-semibold" href="#pricing"><i className="bi bi-tags me-1"></i>Pricing</a></li>
+                            <li className="nav-item me-3"><a className="nav-link text-dark fw-semibold" href="/"><i className="bi bi-house-door me-1"></i>Home</a></li>
+                            <li className="nav-item me-3"><a className="nav-link text-dark fw-semibold" href="/aboutus"><i className="bi bi-info-circle me-1"></i>About</a></li>
+                            <li className="nav-item me-3"><a className="nav-link text-dark fw-semibold" href="/pricing"><i className="bi bi-tags me-1"></i>Pricing</a></li>
                             <li className="nav-item mt-2 mt-lg-0">
-                                <button className="btn btn-primary px-4 py-2 btn-modern fw-semibold shadow-sm">
+                                <a className="btn btn-primary px-4 py-2 btn-modern fw-semibold shadow-sm" href="/login">
                                     <i className="bi bi-person-circle me-2"></i>Login / Sign Up
-                                </button>
+                                </a>
                             </li>
                         </ul>
                     </div>

@@ -6,6 +6,7 @@ import Settings from './pages/Settings';
 import Home from './pages/Home';
 import LoginAndSignup from './pages/LoginAndSignup';
 import Pricing from './pages/Pricing';
+import AboutUs from './pages/AboutUs';
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
         </Route>
         <Route path="/login" element={<LoginAndSignup />} />
         <Route path="/pricing" element={<Pricing />} />
+        <Route path="/aboutus" element={<AboutUs />} />
       </Routes>
     </BrowserRouter>
   );
