@@ -5,6 +5,7 @@ import Users from './pages/Users';
 import Settings from './pages/Settings';
 import Home from './pages/Home';
 import LoginAndSignup from './pages/LoginAndSignup';
+import Pricing from './pages/Pricing';
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
           <Route path="/dashboard/reports/*" element={<div className="p-4">Reports Module</div>} />
         </Route>
         <Route path="/login" element={<LoginAndSignup />} />
+        <Route path="/pricing" element={<Pricing />} />
       </Routes>
     </BrowserRouter>
   );
