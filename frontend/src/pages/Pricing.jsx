@@ -1,4 +1,5 @@
 import React from "react";
+import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
@@ -63,12 +64,12 @@ const courses = [
 
 export default function Pricing() {
     return (
-    <div>
-        <Navbar />
-        <div className="bg-light min-vh-90 py-5 mt-5">
-            {/* Custom CSS injected for hover effects and clean transitions */}
-            <style>
-                {`
+        <div>
+            <Navbar />
+            <div className="bg-light min-vh-90 py-5 mt-5">
+                {/* Custom CSS injected for hover effects and clean transitions */}
+                <style>
+                    {`
           .course-card {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             border: none;
@@ -100,62 +101,66 @@ export default function Pricing() {
             transform: scale(1.05);
           }
         `}
-            </style>
+                </style>
 
-            <div className="container">
-                {/* Header Section */}
-                <div className="text-center mb-5">
-                    <h1 className="fw-bold text-dark mb-3">Courses</h1>
-                    <p className="text-muted fs-5">
-                        Expand your knowledge with our industry-leading curriculum.
-                    </p>
-                </div>
+                <Container>
+                    {/* Header Section */}
+                    <div className="text-center mb-5">
+                        <h1 className="fw-bold text-dark mb-3">Courses</h1>
+                        <p className="text-muted fs-5">
+                            Expand your knowledge with our industry-leading curriculum.
+                        </p>
+                    </div>
 
-                {/* Courses Grid */}
-                <div className="row g-4">
-                    {courses.map((course) => (
-                        <div key={course.id} className="col-12 col-md-6 col-lg-3">
-                            <div className="card h-100 shadow-sm course-card bg-white">
+                    {/* Courses Grid */}
+                    <Row className="g-4">
+                        {courses.map((course) => (
+                            <Col xs={12} md={6} lg={3} key={course.id}>
+                                <Card className="h-100 shadow-sm course-card bg-white">
 
-                                <div className="card-img-wrapper">
-                                    <img
-                                        src={course.image}
-                                        alt={course.title}
-                                        loading="lazy"
-                                    />
-                                </div>
-
-                                <div className="card-body d-flex flex-column p-4">
-                                    <h5 className="card-title fw-bold mb-2">
-                                        {course.title}
-                                    </h5>
-                                    <p className="card-text text-muted flex-grow-1" style={{ fontSize: '0.9rem' }}>
-                                        {course.description}
-                                    </p>
-
-                                    <div className="d-flex align-items-center justify-content-between mt-3 mb-4">
-                                        <span className={`fs-5 fw-bold ${course.price === 'Free' ? 'text-success' : 'text-primary'}`}>
-                                            {course.price === 'Free' ? (
-                                                <><i className="bi bi-gift-fill me-2"></i>Free</>
-                                            ) : (
-                                                course.price
-                                            )}
-                                        </span>
+                                    <div className="card-img-wrapper">
+                                        <Card.Img
+                                            src={course.image}
+                                            alt={course.title}
+                                            loading="lazy"
+                                        />
                                     </div>
 
-                                    <a href={`/courses/${course.id}`} className="btn btn-primary w-100 course-btn py-2 fw-semibold">
-                                        <i className="bi bi-book-half me-2"></i>
-                                        View Course
-                                    </a>
-                                </div>
+                                    <Card.Body className="d-flex flex-column p-4">
+                                        <Card.Title className="fw-bold mb-2">
+                                            {course.title}
+                                        </Card.Title>
+                                        <Card.Text className="text-muted flex-grow-1" style={{ fontSize: '0.9rem' }}>
+                                            {course.description}
+                                        </Card.Text>
 
-                            </div>
-                        </div>
-                    ))}
-                </div>
+                                        <div className="d-flex align-items-center justify-content-between mt-3 mb-4">
+                                            <span className={`fs-5 fw-bold ${course.price === 'Free' ? 'text-success' : 'text-primary'}`}>
+                                                {course.price === 'Free' ? (
+                                                    <><i className="bi bi-gift-fill me-2"></i>Free</>
+                                                ) : (
+                                                    course.price
+                                                )}
+                                            </span>
+                                        </div>
+
+                                        <Button 
+                                            href={`/courses/${course.id}`} 
+                                            variant="primary" 
+                                            className="w-100 course-btn py-2 fw-semibold mt-auto"
+                                        >
+                                            <i className="bi bi-book-half me-2"></i>
+                                            View Course
+                                        </Button>
+                                    </Card.Body>
+
+                                </Card>
+                            </Col>
+                        ))}
+                    </Row>
+                </Container>
             </div>
+            <Footer />
         </div>
-        <Footer />
-    </div>
     );
 }
