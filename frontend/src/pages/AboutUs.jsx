@@ -1,4 +1,5 @@
 import React from "react";
+import { Container, Row, Col, Card, Button, Image } from "react-bootstrap";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
@@ -100,18 +101,18 @@ export default function AboutUs() {
                 </style>
 
                 {/* --- HERO SECTION --- */}
-                <div className="container mt-5 mb-5 pb-4">
-                    <div className="row align-items-center g-5">
+                <Container className="mt-5 mb-5 pb-4">
+                    <Row className="align-items-center g-5">
                         {/* Left Side: Animated Image */}
-                        <div className="col-12 col-lg-6">
-                            <img
+                        <Col xs={12} lg={6}>
+                            <Image
                                 src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1000&q=80"
                                 alt="Our Campus"
                                 className="hero-img"
                             />
-                        </div>
+                        </Col>
                         {/* Right Side: Title and Dynamic Text */}
-                        <div className="col-12 col-lg-6 d-flex flex-column justify-content-center">
+                        <Col xs={12} lg={6} className="d-flex flex-column justify-content-center">
                             <h1 className="display-4 fw-bold text-dark mb-4">About Us</h1>
                             <p className="lead text-muted mb-4">
                                 We are a premier institution dedicated to shaping the next generation of software engineers, system administrators, and cybersecurity experts. Our modern curriculum bridges the gap between theoretical computer science and hands-on industry application.
@@ -119,13 +120,13 @@ export default function AboutUs() {
                             <p className="text-muted">
                                 Whether you are mastering Linux terminal commands, exploring deep concepts in automata theory, or securing enterprise networks, our dynamic learning environment adapts to your goals. Join us to innovate, build, and secure the digital future.
                             </p>
-                        </div>
-                    </div>
-                </div>
+                        </Col>
+                    </Row>
+                </Container>
 
                 {/* --- SECTION 2: SCHOOL OVERVIEW --- */}
-                <div className="container mb-5 pb-5">
-                    <div className="card shadow-sm border-0 rounded-4 p-4 p-md-5 bg-white">
+                <Container className="mb-5 pb-5">
+                    <Card className="shadow-sm border-0 rounded-4 p-4 p-md-5 bg-white">
                         <div className="text-center max-w-75 mx-auto">
                             <i className="bi bi-bank2 display-1 text-primary mb-3"></i>
                             <h2 className="fw-bold mb-4">Our Mission & Vision</h2>
@@ -133,24 +134,24 @@ export default function AboutUs() {
                                 Founded on the principles of academic excellence and technological innovation, our school focuses heavily on practical skill development alongside robust theoretical foundations. We pride ourselves on offering an agile curriculum that stays ahead of industry trends—from advanced cloud infrastructure to modern web frameworks. We believe that education should be accessible, highly responsive, and strictly aligned with real-world technological demands.
                             </p>
                         </div>
-                    </div>
-                </div>
+                    </Card>
+                </Container>
 
                 {/* --- PROFESSOR SECTION --- */}
-                <div className="container">
+                <Container>
                     <div className="text-center mb-5">
                         <h2 className="fw-bold text-dark">Our Professors</h2>
                         <p className="text-muted">Learn from industry veterans and renowned academics.</p>
                     </div>
 
-                    <div className="row g-4">
+                    <Row className="g-4">
                         {professors.map((prof) => (
-                            <div key={prof.id} className="col-12 col-md-6 col-lg-3">
-                                <div className="card h-100 shadow-sm prof-card">
+                            <Col xs={12} md={6} lg={3} key={prof.id}>
+                                <Card className="h-100 shadow-sm prof-card">
 
                                     {/* Profile Image */}
                                     <div className="prof-img-wrapper">
-                                        <img
+                                        <Image
                                             src={prof.image}
                                             alt={`${prof.title} ${prof.name}`}
                                             className="prof-img"
@@ -159,26 +160,30 @@ export default function AboutUs() {
                                     </div>
 
                                     {/* Card Body */}
-                                    <div className="card-body d-flex flex-column text-center px-4 pb-4">
-                                        <h5 className="card-title fw-bold mb-1">
+                                    <Card.Body className="d-flex flex-column text-center px-4 pb-4">
+                                        <Card.Title className="fw-bold mb-1">
                                             <span className="text-primary fs-6 d-block mb-1">{prof.title}</span>
                                             {prof.name}
-                                        </h5>
-                                        <p className="card-text text-muted mt-3 mb-4 flex-grow-1" style={{ fontSize: '0.95rem' }}>
+                                        </Card.Title>
+                                        <Card.Text className="text-muted mt-3 mb-4 flex-grow-1" style={{ fontSize: '0.95rem' }}>
                                             {prof.description}
-                                        </p>
+                                        </Card.Text>
 
                                         {/* Link Button */}
-                                        <a href={`/professors/${prof.id}`} className="btn btn-outline-primary w-100 hover-btn py-2 fw-semibold mt-auto">
+                                        <Button 
+                                            href={`/professors/${prof.id}`} 
+                                            variant="outline-primary" 
+                                            className="w-100 hover-btn py-2 fw-semibold mt-auto"
+                                        >
                                             <i className="bi bi-person-lines-fill me-2"></i>
                                             View Profile
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
+                                        </Button>
+                                    </Card.Body>
+                                </Card>
+                            </Col>
                         ))}
-                    </div>
-                </div>
+                    </Row>
+                </Container>
             </div>
             <Footer />
         </div>
