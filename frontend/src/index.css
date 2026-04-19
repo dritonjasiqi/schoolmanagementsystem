@@ -1,3 +1,31 @@
+ html{ 
+  scrollbar-color: #0d6efd 
+}
+
+::-webkit-scrollbar {
+  color:  #0d6efd;
+  background-color:  #0d6efd;
+  width: 10px;
+  height: 10px;
+}
+
+/* Track (the background of the scrollbar) */
+::-webkit-scrollbar-track {
+  background: #0d6efd; /* light gray/white to match your theme */
+  border-radius: 8px;
+}
+
+/* Thumb (the draggable blue part) */
+::-webkit-scrollbar-thumb {
+  background: #0d6efd; /* Bootstrap Primary Blue */
+  border-radius: 8px;
+  border: 2px solid #f4f6f9; /* Creates a nice padding effect */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #0b5ed7; 
+}
+
 body {
   background-color: #f4f6f9;
   font-family: system-ui, -apple-system, sans-serif;

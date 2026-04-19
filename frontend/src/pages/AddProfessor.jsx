@@ -1,24 +1,8 @@
 import { useState } from 'react';
 import { Card, Form, Row, Col, Button, ToggleButton, ToggleButtonGroup } from 'react-bootstrap';
-import { 
-  Person, 
-  Envelope, 
-  Key, 
-  Hash, 
-  CalendarDate, 
-  JournalBookmark,
-  PersonPlus
-} from 'react-bootstrap-icons';
+import { Person, Envelope, Key, Hash, CalendarDate, JournalBookmark,PersonPlus } from 'react-bootstrap-icons';
 
 const moduleOptions = [
-  'Mathematics',
-  'Computer Science',
-  'Physics',
-  'Chemistry',
-  'Biology',
-  'English',
-  'History',
-  'Design',
   'Mathematics',
   'Computer Science',
   'Physics',
@@ -118,22 +102,6 @@ export default function AddProfessor() {
                     name="email"
                     placeholder="Enter email address"
                     value={formData.email}
-                    onChange={handleChange}
-                    className="py-2 shadow-sm border-0 bg-light"
-                  />
-                </Form.Group>
-              </Col>
-
-              <Col xs={12} md={6}>
-                <Form.Group controlId="idEmail">
-                  <Form.Label className="fw-semibold d-flex align-items-center gap-2">
-                    <Hash className="text-primary" /> IdEmail
-                  </Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="idEmail"
-                    placeholder="Enter institution email ID"
-                    value={formData.idEmail}
                     onChange={handleChange}
                     className="py-2 shadow-sm border-0 bg-light"
                   />
