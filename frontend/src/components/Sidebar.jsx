@@ -63,6 +63,9 @@ export default function Sidebar({ isOpen, closeMobile }) {
           <Gear /> Settings
         </NavLink>
 
+      <NavLink to="/dashboard/professors" className="nav-link mt-2" onClick={closeMobile}>
+          <People /> Professors
+        </NavLink>
       </div>
     </div>
   );
