@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Container, Row, Col, Button, Image, Carousel, Card, Form } from "react-bootstrap";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
@@ -24,46 +25,44 @@ export default function Home() {
     const [activeSlide, setActiveSlide] = useState(0);
     const totalSlides = Math.ceil(reviews.length / 2); // 2 reviews per slide = 3 slides
 
-    const nextSlide = () => {
-        setActiveSlide((prev) => (prev + 1) % totalSlides);
-    };
-
-    const prevSlide = () => {
-        setActiveSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
+    const handleSelect = (selectedIndex) => {
+        setActiveSlide(selectedIndex);
     };
 
     return (
         <div>
             <Navbar />
+            
             {/* HERO SECTION */}
             <section id="home" className="hero-section d-flex align-items-center">
-                <div className="container">
-                    <div className="row align-items-center flex-column-reverse flex-lg-row">
-                        <div className="col-lg-6 mt-5 mt-lg-0 text-center text-lg-start">
+                <Container>
+                    <Row className="align-items-center flex-column-reverse flex-lg-row">
+                        <Col lg={6} className="mt-5 mt-lg-0 text-center text-lg-start">
                             <h1 className="display-4 fw-bold text-dark mb-4">Empower Your Learning Journey</h1>
                             <p className="lead text-muted mb-5">
                                 The ultimate modern school management system designed to streamline your courses, track your progress, and help you succeed academically.
                             </p>
-                            <button className="btn btn-primary btn-lg px-5 py-3 btn-modern shadow">
+                            <Button variant="primary" size="lg" className="px-5 py-3 btn-modern shadow">
                                 Get Started Today <i className="bi bi-arrow-right ms-2"></i>
-                            </button>
-                        </div>
-                        <div className="col-lg-6 text-center">
-                            <img
+                            </Button>
+                        </Col>
+                        <Col lg={6} className="text-center">
+                            <Image
                                 src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80"
                                 alt="Students studying"
-                                className="img-fluid hero-img"
+                                fluid
+                                className="hero-img"
                             />
-                        </div>
-                    </div>
-                </div>
+                        </Col>
+                    </Row>
+                </Container>
             </section>
 
             {/* ABOUT US SECTION */}
             <section id="about" className="py-5 bg-white">
-                <div className="container py-5">
-                    <div className="row justify-content-center text-center mb-5">
-                        <div className="col-lg-8">
+                <Container className="py-5">
+                    <Row className="justify-content-center text-center mb-5">
+                        <Col lg={8}>
                             <h2 className="fw-bold mb-3">About Us</h2>
                             <p className="text-muted fs-5">
                                 We believe education should be accessible, organized, and inspiring. Our platform bridges the gap between students and educators by providing world-class management tools.
@@ -71,114 +70,123 @@ export default function Home() {
                             <p className="text-muted fs-5">
                                 Built by a team of passionate developers and educators, EduManage integrates seamless course tracking, interactive learning, and community engagement in one beautiful, responsive interface.
                             </p>
-                        </div>
-                    </div>
-                    {/* Reviews Custom React Carousel */}
-                    <div id="reviewsCarousel" className="carousel slide pb-5">
-                        <div className="carousel-inner px-2 px-md-5">
-                            {Array.from({ length: totalSlides }).map((_, slideIndex) => (
-                                <div
-                                    className={`carousel-item ${slideIndex === activeSlide ? 'active d-block' : 'd-none'}`}
-                                    key={slideIndex}
-                                >
-                                    <div className="row justify-content-center g-4">
-                                        {reviews.slice(slideIndex * 2, slideIndex * 2 + 2).map((review) => (
-                                            <div className="col-md-6" key={review.id}>
-                                                <div className="review-card d-flex flex-column justify-content-between">
-                                                    <p className="text-muted fst-italic mb-4">"{review.text}"</p>
-                                                    <div className="d-flex align-items-center">
-                                                        <img src={`https://i.pravatar.cc/150?u=${review.id}`} alt={review.name} className="profile-img me-3 shadow-sm" />
-                                                        <div>
-                                                            <h6 className="mb-0 fw-bold">{review.name}</h6>
-                                                            <div className="text-warning mt-1">
-                                                                {[...Array(5)].map((_, i) => (
-                                                                    <i key={i} className={`bi ${i < review.stars ? 'bi-star-fill' : 'bi-star'} me-1`}></i>
-                                                                ))}
-                                                            </div>
+                        </Col>
+                    </Row>
+                    
+                    {/* Reviews React-Bootstrap Carousel */}
+                    <Carousel 
+                        id="reviewsCarousel" 
+                        className="pb-5"
+                        activeIndex={activeSlide}
+                        onSelect={handleSelect}
+                        indicators={false}
+                        prevIcon={<span className="carousel-control-prev-icon shadow" aria-hidden="true"></span>}
+                        nextIcon={<span className="carousel-control-next-icon shadow" aria-hidden="true"></span>}
+                    >
+                        {Array.from({ length: totalSlides }).map((_, slideIndex) => (
+                            <Carousel.Item key={slideIndex}>
+                                <Row className="justify-content-center g-4 px-2 px-md-5">
+                                    {reviews.slice(slideIndex * 2, slideIndex * 2 + 2).map((review) => (
+                                        <Col md={6} key={review.id}>
+                                            <div className="review-card d-flex flex-column justify-content-between h-100">
+                                                <p className="text-muted fst-italic mb-4">"{review.text}"</p>
+                                                <div className="d-flex align-items-center">
+                                                    <Image 
+                                                        src={`https://i.pravatar.cc/150?u=${review.id}`} 
+                                                        alt={review.name} 
+                                                        className="profile-img me-3 shadow-sm" 
+                                                    />
+                                                    <div>
+                                                        <h6 className="mb-0 fw-bold">{review.name}</h6>
+                                                        <div className="text-warning mt-1">
+                                                            {[...Array(5)].map((_, i) => (
+                                                                <i key={i} className={`bi ${i < review.stars ? 'bi-star-fill' : 'bi-star'} me-1`}></i>
+                                                            ))}
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                        {/* Custom Carousel Controls */}
-                        <button className="carousel-control-prev" type="button" onClick={prevSlide}>
-                            <span className="carousel-control-prev-icon shadow" aria-hidden="true"></span>
-                            <span className="visually-hidden">Previous</span>
-                        </button>
-                        <button className="carousel-control-next" type="button" onClick={nextSlide}>
-                            <span className="carousel-control-next-icon shadow" aria-hidden="true"></span>
-                            <span className="visually-hidden">Next</span>
-                        </button>
-                    </div>
-                </div>
+                                        </Col>
+                                    ))}
+                                </Row>
+                            </Carousel.Item>
+                        ))}
+                    </Carousel>
+                </Container>
             </section>
+
             {/* COURSES SECTION */}
             <section id="courses" className="py-5">
-                <div className="container py-5">
+                <Container className="py-5">
                     <div className="text-center mb-5">
                         <h2 className="fw-bold">Most Popular Courses</h2>
                         <p className="text-muted">Expand your knowledge with our top-rated modules</p>
                     </div>
-                    <div className="row g-4">
+                    <Row className="g-4">
                         {courses.map((course) => (
-                            <div className="col-md-6 col-lg-3" key={course.id}>
-                                <div className="card h-100 hover-card shadow-sm">
-                                    <img src={course.img} className="card-img-top" alt={course.title} style={{ height: '200px', objectFit: 'cover' }} />
-                                    <div className="card-body d-flex flex-column">
+                            <Col md={6} lg={3} key={course.id}>
+                                <Card className="h-100 hover-card shadow-sm">
+                                    <Card.Img 
+                                        variant="top" 
+                                        src={course.img} 
+                                        alt={course.title} 
+                                        style={{ height: '200px', objectFit: 'cover' }} 
+                                    />
+                                    <Card.Body className="d-flex flex-column">
                                         <div className="d-flex justify-content-between align-items-start mb-2">
-                                            <h5 className="card-title fw-bold mb-0">{course.title}</h5>
+                                            <Card.Title className="fw-bold mb-0">{course.title}</Card.Title>
                                         </div>
-                                        <p className="card-text text-muted flex-grow-1 mt-2">{course.desc}</p>
+                                        <Card.Text className="text-muted flex-grow-1 mt-2">{course.desc}</Card.Text>
                                         <div className="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
                                             <span className={`fw-bold fs-5 ${course.price === 'Free' ? 'text-success' : 'text-primary'}`}>
                                                 {course.price}
                                             </span>
-                                            <button className="btn btn-outline-primary btn-sm btn-modern">
+                                            <Button variant="outline-primary" size="sm" className="btn-modern">
                                                 View Course
-                                            </button>
+                                            </Button>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
+                                    </Card.Body>
+                                </Card>
+                            </Col>
                         ))}
-                    </div>
-                </div>
+                    </Row>
+                </Container>
             </section>
 
             {/* CONTACT SECTION */}
             <section id="contact" className="py-5 bg-white">
-                <div className="container py-5">
-                    <div className="row justify-content-center">
-                        <div className="col-lg-6 col-md-8">
+                <Container className="py-5">
+                    <Row className="justify-content-center">
+                        <Col lg={6} md={8}>
                             <div className="text-center mb-4">
                                 <h2 className="fw-bold">Get in Touch</h2>
                                 <p className="text-muted">Have any questions? We'd love to hear from you.</p>
                             </div>
-                            <form className="shadow-sm p-4 p-md-5 rounded-4 border bg-light">
-                                <div className="mb-3">
-                                    <label htmlFor="name" className="form-label fw-semibold">Full Name</label>
-                                    <input type="text" className="form-control form-control-lg bg-white" id="name" placeholder="John Doe" />
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="email" className="form-label fw-semibold">Email Address</label>
-                                    <input type="email" className="form-control form-control-lg bg-white" id="email" placeholder="name@example.com" />
-                                </div>
-                                <div className="mb-4">
-                                    <label htmlFor="message" className="form-label fw-semibold">Message</label>
-                                    <textarea className="form-control bg-white" id="message" rows="4" placeholder="How can we help you?"></textarea>
-                                </div>
-                                <button type="submit" className="btn btn-primary w-100 btn-lg btn-modern fw-bold">
+                            <Form className="shadow-sm p-4 p-md-5 rounded-4 border bg-light">
+                                <Form.Group className="mb-3" controlId="name">
+                                    <Form.Label className="fw-semibold">Full Name</Form.Label>
+                                    <Form.Control size="lg" className="bg-white" placeholder="John Doe" />
+                                </Form.Group>
+                                
+                                <Form.Group className="mb-3" controlId="email">
+                                    <Form.Label className="fw-semibold">Email Address</Form.Label>
+                                    <Form.Control size="lg" type="email" className="bg-white" placeholder="name@example.com" />
+                                </Form.Group>
+                                
+                                <Form.Group className="mb-4" controlId="message">
+                                    <Form.Label className="fw-semibold">Message</Form.Label>
+                                    <Form.Control as="textarea" rows={4} className="bg-white" placeholder="How can we help you?" />
+                                </Form.Group>
+                                
+                                <Button type="submit" variant="primary" size="lg" className="w-100 btn-modern fw-bold">
                                     Send Message <i className="bi bi-send ms-2"></i>
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+                                </Button>
+                            </Form>
+                        </Col>
+                    </Row>
+                </Container>
             </section>
+            
             {/* FOOTER */}
             <Footer />
         </div>
