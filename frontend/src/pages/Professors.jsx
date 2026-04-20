@@ -11,8 +11,8 @@ export default function Professors() {
                             <tr><th>Email</th><th>Name</th><th>Birthday</th><th>Edit User</th><th>Remove User</th></tr>
                         </thead>
                         <tbody>
-                            <tr><td>johndoe@example.com</td><td>John Doe</td><td>1980-01-01</td><td><a className='btn btn-success' href="/edit-professor/1">Edit</a></td><td><a className='btn btn-danger' href="/remove-professor/1">Remove</a></td></tr>
-                            <tr><td>janesmith@example.com</td><td>Jane Smith</td><td>1985-05-05</td><td><a className='btn btn-success' href="/edit-professor/2">Edit</a></td><td><a className='btn btn-danger' href="/remove-professor/2">Remove</a></td></tr>
+                            <tr><td>johndoe@example.com</td><td>John Doe</td><td>1980-01-01</td><td><a className='btn btn-success' href="/editProfessor/1">Edit</a></td><td><a className='btn btn-danger' href="/removeProfessor/1">Remove</a></td></tr>
+                            <tr><td>janesmith@example.com</td><td>Jane Smith</td><td>1985-05-05</td><td><a className='btn btn-success' href="/editProfessor/2">Edit</a></td><td><a className='btn btn-danger' href="/removeProfessor/2">Remove</a></td></tr>
                         </tbody>
                     </Table>
                 </Card.Body>
