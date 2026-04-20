@@ -10,7 +10,7 @@ import AboutUs from './pages/AboutUs';
 import AddProfessor from './pages/AddProfessor';
 import Professors from './pages/Professors';
 import EditProfessor from './pages/EditProfessor';
-// import RemoveProfessor from './pages/RemoveProfessor';
+import RemoveProfessor from './pages/RemoveProfessor';
 
 export default function App() {
   return (
@@ -26,9 +26,10 @@ export default function App() {
           <Route path="/dashboard/reports/*" element={<div className="p-4">Reports Module</div>} />
           <Route path="/dashboard/addProfessor" element={<AddProfessor />} />
           <Route path="/dashboard/professors" element={<Professors />} />
-         {/* <Route path="/dashboard/removeProfessor/:id" element={<RemoveProfessor />} /> */}
+       
         </Route>
         <Route path="/editProfessor/:id" element={<EditProfessor />} />
+        <Route path="/removeProfessor/:id" element={<RemoveProfessor />} />
         <Route path="/login" element={<LoginAndSignup />} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/aboutus" element={<AboutUs />} />
