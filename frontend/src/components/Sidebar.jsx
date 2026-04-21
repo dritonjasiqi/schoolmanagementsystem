@@ -18,7 +18,7 @@ export default function Sidebar({ isOpen, closeMobile }) {
         <NavLink to="/dashboard" className="nav-link" end onClick={closeMobile}>
           <Speedometer2 /> Dashboard
         </NavLink>
-        <NavLink to="/dashboard/users" className="nav-link" onClick={closeMobile}>
+        <NavLink to="/dashboard/userpages/users" className="nav-link" onClick={closeMobile}>
           <People /> Users
         </NavLink>
         
@@ -63,7 +63,7 @@ export default function Sidebar({ isOpen, closeMobile }) {
           <Gear /> Settings
         </NavLink>
 
-      <NavLink to="/dashboard/professors" className="nav-link mt-2" onClick={closeMobile}>
+      <NavLink to="/dashboard/userpages/professors" className="nav-link mt-2" onClick={closeMobile}>
           <People /> Professors
         </NavLink>
       </div>

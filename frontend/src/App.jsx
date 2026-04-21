@@ -1,16 +1,16 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
-import Users from './pages/Users';
+import Users from './pages/userpages/Users';
 import Settings from './pages/Settings';
 import Home from './pages/Home';
 import LoginAndSignup from './pages/LoginAndSignup';
 import Pricing from './pages/Pricing';
 import AboutUs from './pages/AboutUs';
-import AddProfessor from './pages/AddProfessor';
-import Professors from './pages/Professors';
-import EditProfessor from './pages/EditProfessor';
-import RemoveProfessor from './pages/RemoveProfessor';
+import AddProfessor from './pages/userpages/AddProfessor';
+import Professors from './pages/userpages/Professors';
+import EditProfessor from './pages/userpages/EditProfessor';
+import RemoveProfessor from './pages/userpages/RemoveProfessor';
 
 export default function App() {
   return (
@@ -19,17 +19,17 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/dashboard" element={<Layout />}>
           <Route index element={<Dashboard />} />
-          <Route path="/dashboard/users" element={<Users />} />
+          <Route path="/dashboard/userpages/users" element={<Users />} />
           <Route path="/dashboard/settings" element={<Settings />} />
           {/* Placeholder routes for dropdown sub-items */}
           <Route path="/dashboard/products/*" element={<div className="p-4">Products Module</div>} />
           <Route path="/dashboard/reports/*" element={<div className="p-4">Reports Module</div>} />
-          <Route path="/dashboard/addProfessor" element={<AddProfessor />} />
-          <Route path="/dashboard/professors" element={<Professors />} />
+          <Route path="/dashboard/userpages/addProfessor" element={<AddProfessor />} />
+          <Route path="/dashboard/userpages/professors" element={<Professors />} />
        
         </Route>
-        <Route path="/editProfessor/:id" element={<EditProfessor />} />
-        <Route path="/removeProfessor/:id" element={<RemoveProfessor />} />
+        <Route path="/userpages/editProfessor/:id" element={<EditProfessor />} />
+        <Route path="/userpages/removeProfessor/:id" element={<RemoveProfessor />} />
         <Route path="/login" element={<LoginAndSignup />} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/aboutus" element={<AboutUs />} />
