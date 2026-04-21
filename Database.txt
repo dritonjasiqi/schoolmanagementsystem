@@ -28,4 +28,12 @@ Professors , is child
 Admin, is Child
     has
     userId is UUID, referenc users.id
-    
+
+Classes
+    ID p.k. is UUID
+    name not null, is Varchar
+    price not null, is Decimal
+    professorId is UUID, referenc professors.userId
+
+
+
