@@ -13,3 +13,19 @@ users , is Parent
     role is Enum
     isVerified is Boolean
     createdAt is TIMESTAMP
+
+students, is child
+    has
+    userId is UUID, referenc users.id
+    enrollmentNummer  Unique , is Long
+
+Professors , is child
+     has
+     userId is UUID, referenc users.id user
+     personalEmail Unique, is Varchar
+     cv is Varchar
+
+Admin, is Child
+    has
+    userId is UUID, referenc users.id
+    
