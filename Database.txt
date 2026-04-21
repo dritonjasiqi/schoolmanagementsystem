@@ -1,0 +1,15 @@
+Database Idee.
+
+Tables
+
+users , is Parent
+ 	has
+ 	ID, P.K. , is UUID
+ 	email, Unique, Not Null, Is Varchar
+ 	password Not Null, Is Varchar
+ 	fullName Not Null, is Varchar
+    birthday is Date
+    photo is Varchar
+    role is Enum
+    isVerified is Boolean
+    createdAt is TIMESTAMP
