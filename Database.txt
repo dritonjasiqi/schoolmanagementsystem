@@ -19,21 +19,30 @@ students, is child
     userId is UUID, referenc users.id
     enrollmentNummer  Unique , is Long
 
-Professors , is child
+professors , is child
      has
      userId is UUID, referenc users.id user
      personalEmail Unique, is Varchar
      cv is Varchar
 
-Admin, is Child
+admin, is Child
     has
     userId is UUID, referenc users.id
 
-Classes
+classes
+    has
     ID p.k. is UUID
     name not null, is Varchar
     price not null, is Decimal
     professorId is UUID, referenc professors.userId
+
+enrollments (The join Table)
+    has
+    ID p.k. is UUID,
+    studentId is UUID, referenc students.userId
+    classes is UUID, referenc classes.ID
+    status is Enum
+    enrolledAT is TIMESTAMP
 
 
 
