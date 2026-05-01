@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { Collapse } from 'react-bootstrap';
 import { useState } from 'react';
-import { Speedometer2, People, Gear, BoxSeam, BarChart, Circle } from 'react-bootstrap-icons';
+import { Speedometer2, People, Gear, BoxSeam, BarChart, Circle, BookHalf } from 'react-bootstrap-icons';
 
 export default function Sidebar({ isOpen, closeMobile }) {
   const [openMenus, setOpenMenus] = useState({});
@@ -65,7 +65,11 @@ export default function Sidebar({ isOpen, closeMobile }) {
 
       <NavLink to="/dashboard/userpages/professors" className="nav-link mt-2" onClick={closeMobile}>
           <People /> Professors
-        </NavLink>
+      </NavLink>
+
+      <NavLink to="/dashboard/classes/classes" className="nav-link mt-2" onClick={closeMobile}>
+          <BookHalf /> Classes
+      </NavLink>
       </div>
     </div>
   );
