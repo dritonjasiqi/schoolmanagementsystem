@@ -8,9 +8,9 @@ users , is Parent
  	email, Unique, Not Null, Is Varchar
  	password Not Null, Is Varchar
  	fullName Not Null, is Varchar
-    birthday is Date
-    photo is Varchar
-    role is Enum
+    dateOfBirth is Date
+    profilePhotoUrl is Varchar
+    role is Enum not null
     isVerified is Boolean
     createdAt is TIMESTAMP
 
