@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "students")
 @Getter
 @Setter
 @PrimaryKeyJoinColumn(name = "user_id") // verweist auf einen User
