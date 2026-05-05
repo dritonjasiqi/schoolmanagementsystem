@@ -15,6 +15,6 @@ public class  Professor extends User{
     private String personalEmail;
     private String cvUrl;
 
-    //@OneToMany(mappedBy = "professor", cascade = CascadeType.ALL)
-    //private List<Enrollment> classes;
+    @OneToMany(mappedBy = "professor", cascade = CascadeType.ALL)
+    private List<Enrollment> courses;
 }

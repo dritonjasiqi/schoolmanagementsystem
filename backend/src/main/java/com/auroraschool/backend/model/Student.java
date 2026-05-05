@@ -16,6 +16,6 @@ public class Student extends User{
     @Column(unique = true, nullable = false)
     private Long enrollmentNUmber;
 
-    //@OneToMany(cascade = CascadeType.ALL,mappedBy = "student", orphanRemoval = true)
-    //private List<Enrollment> classes = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "student", orphanRemoval = true)
+    private List<Enrollment> courses = new ArrayList<>();
 }

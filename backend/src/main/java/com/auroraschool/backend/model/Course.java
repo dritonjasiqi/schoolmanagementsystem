@@ -13,7 +13,7 @@ import java.util.UUID;
 @Table(name = "classes")
 @Getter
 @Setter
-public class Class {
+public class Course {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -29,6 +29,6 @@ public class Class {
     @JoinColumn(name= "professor_id", nullable = false)
     private Professor professor;
 
-    //@OneToMany(mappedBy = "class",cascade = CascadeType.ALL, orphanRemoval = true)
-    //private List<Enrollment> enrollments = new ArrayList<>();
+    @OneToMany(mappedBy = "course",cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Enrollment> enrollments = new ArrayList<>();
 }
