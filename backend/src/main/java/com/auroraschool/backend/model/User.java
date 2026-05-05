@@ -1,10 +1,18 @@
 package com.auroraschool.backend.model;
 import jakarta.persistence.*;
-import org.hibernate.validator.constraints.UUID;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.UUID;
 
 
 import java.time.LocalDate;
 
+@Entity
+@Table(name = "users")
+@Inheritance(strategy = InheritanceType.JOINED)
+@Getter
+@Setter
 abstract public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -16,11 +24,12 @@ abstract public class User {
     @Column(nullable = false)
     private String password;
 
-    private String name;
+    private String fullName;
     private LocalDate dateOfBirth;
-    private String urlOfProfilePhoto;
+    private String profilePhotoUrl;
     private boolean isVerified = false;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Roles role;
 }
