@@ -16,5 +16,5 @@ public class  Professor extends User{
     private String cvUrl;
 
     //@OneToMany(mappedBy = "professor", cascade = CascadeType.ALL)
-    private List<Classes> classes;
+    //private List<Enrollment> classes;
 }
