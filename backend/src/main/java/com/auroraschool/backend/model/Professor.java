@@ -12,6 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 public class  Professor extends User{
+    @Column(unique = true)
     private String personalEmail;
     private String cvUrl;
 
