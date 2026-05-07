@@ -14,7 +14,7 @@ import java.util.List;
 @PrimaryKeyJoinColumn(name = "user_id") // verweist auf einen User
 public class Student extends User{
     @Column(unique = true, nullable = false)
-    private Long enrollmentNUmber;
+    private Long enrollmentNumber;
 
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "student", orphanRemoval = true)
     private List<Enrollment> courses = new ArrayList<>();
