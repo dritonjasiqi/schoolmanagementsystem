@@ -1,6 +1,6 @@
 package com.auroraschool.backend.model;
 
-enum Roles {
+public enum Roles {
     STUDENT,
     PROFESSOR,
     ADMIN
