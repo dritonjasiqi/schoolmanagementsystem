@@ -6,7 +6,7 @@ import java.util.UUID;
 import java.util.List;
 
 public interface CourseService {
-    Course createCourse(Course course);
+    Course createCourse(Course course, UUID professorId);
 
     Course getCourse(UUID courseID);
 
