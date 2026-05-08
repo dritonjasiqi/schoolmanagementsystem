@@ -22,8 +22,10 @@ public class UserServiceClass implements UserService {
 
 
     @Override
-    public void removeUser(UUID id) {
-
+    public void removeUser(UUID id) throws IllegalAccessError {
+        if(!userRepository.existsById(id))
+            throw new IllegalArgumentException(String.format("User with id %s does not exist", id));
+        userRepository.deleteById(id);
     }
 
     @Override
@@ -49,7 +51,7 @@ public class UserServiceClass implements UserService {
     @Override
     public Student addStudent(Student student) throws EmailExistException{
         if(userRepository.existsByEmail(student.getEmail()))
-            throw new EmailExistException("There already exist an account with that email. Please try a different one.");
+            throw new EmailExistException("There already exist an account with that email. Please try a different one!");
         /*TODO Password Hashing*/
         student.setRole(Roles.STUDENT);
         student.setVerified(false);
@@ -57,8 +59,12 @@ public class UserServiceClass implements UserService {
     }
 
     @Override
-    public Professor addProfessor(Professor professor) {
-        return null;
+    public Professor addProfessor(Professor professor) throws EmailExistException {
+        if(userRepository.existsByEmail(professor.getEmail()))
+            throw new EmailExistException("There already exist an account with that email. Please try a different one!");
+        professor.setRole(Roles.PROFESSOR);
+        professor.setVerified(false);
+        return professorRepository.save(professor);
     }
 
     @Override
