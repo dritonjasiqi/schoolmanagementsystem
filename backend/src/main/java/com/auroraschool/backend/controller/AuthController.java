@@ -27,4 +27,16 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while registering the student.");
         }
     }
+
+    @PostMapping("/register/Professor")
+    public ResponseEntity<?> registerProfessor(@RequestBody Professor professor){
+        try {
+            Professor createdProfessor = userService.addProfessor(professor);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdProfessor);
+        } catch (EmailExistException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while registering the professor.");
+        }
+    }
 }
