@@ -32,4 +32,17 @@ public class CourseController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+
+    @PostMapping("/professor/{professorId}")
+    @PreAuthorize("hasAnyRole('ADMIN','PROFESSOR')")
+    public ResponseEntity<?> createCourse(@RequestBody Course course, @PathVariable UUID professorId){
+        try {
+            Course createdCourse = courseService.createCourse(course, professorId);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdCourse);
+        }catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while creating the course.");
+        }
+    }
 }
