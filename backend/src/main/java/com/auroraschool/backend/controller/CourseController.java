@@ -23,4 +23,13 @@ public class CourseController {
         List<Course> courses = courseService.getAllCourses();
         return ResponseEntity.ok(courses);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Course> getCourseById(@PathVariable UUID id){
+        try{
+            return ResponseEntity.ok(courseService.getCourse(id));
+        } catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
 }
