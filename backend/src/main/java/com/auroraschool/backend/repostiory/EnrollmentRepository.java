@@ -15,7 +15,7 @@ import java.util.UUID;
 
 /**
  * Repository interface for Enrollment Entity, extending JpaRepository for CRUD Operation and custom query methods.
- * It includes methods to check if a student is enrolled in a course, find enrollment by student Id  and course Id.
+ * It includes methods to check if a student is enrolled in a course, find enrollment by student Id  and course Id, and give all Enrollments associated with the studentId.
  */
 @Repository
 public interface EnrollmentRepository extends JpaRepository<Enrollment, UUID> {
