@@ -17,6 +17,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Service for Course entity with business operations to create, retrieve, and list courses.
+ * Associates courses with professors and executes repository operations within
+ * transactional boundaries to ensure consistency.
+ */
 @Service
 @Transactional
 @RequiredArgsConstructor

@@ -6,12 +6,22 @@ import com.auroraschool.backend.repostiory.UserRepository;
 import com.auroraschool.backend.repostiory.StudentRepository;
 import com.auroraschool.backend.exception.EmailExistException;
 
+// It wraps Methods execution into a Database transaction, if an Exception thrown rollback
+// and if not than the Transaction is commited
+import jakarta.transaction.Transactional;
+// Generates a constructor for all final fields, enforcing clean constructor injection.
 import lombok.RequiredArgsConstructor;
+// Package that tell Spring this class is a Service containing Business Logic
+// and it will be automatically detected and registered as a Bean in the Spring context
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
+/**
+ * Service for User entity with business operations to create, retrieve, and list users.
+ * Associates users with roles and executes repository operations within
+ * transactional boundaries to ensure consistency.
+ */
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -21,6 +31,11 @@ public class UserServiceClass implements UserService {
     private final StudentRepository studentRepository;
 
 
+    /**
+     * Remove the user associated with id
+     * @param id Id of the user to remove
+     * @throws IllegalAccessError
+     */
     @Override
     public void removeUser(UUID id) throws IllegalAccessError {
         if(!userRepository.existsById(id))
@@ -28,6 +43,11 @@ public class UserServiceClass implements UserService {
         userRepository.deleteById(id);
     }
 
+    /**
+     * Returns the username associated with username
+     * @param username Username of the user that its being search
+     * @return User
+     */
     @Override
     public User getUserByUsername(String username) {
         return null;
@@ -48,6 +68,13 @@ public class UserServiceClass implements UserService {
         return null;
     }
 
+    /**
+     * Adds a new student, it checks if the email is already used by another user, if it is it throws an EmailExistException,
+     * if not it saves the student into the database with the role of STUDENT and verified false
+     * @param student Student Object to add, it must contain all the required fields to create a student
+     * @return Student
+     * @throws EmailExistException Email already exist
+     */
     @Override
     public Student addStudent(Student student) throws EmailExistException{
         if(userRepository.existsByEmail(student.getEmail()))
@@ -58,6 +85,13 @@ public class UserServiceClass implements UserService {
         return studentRepository.save(student);
     }
 
+    /**
+     * Adds a new Professor, it checks if the email is already used by another user, if it is it throws an EmailExistException,
+     * if not it saves the professor into the database with the role of PROFESSOR and verified false
+     * @param professor Professor Object to add, it must contain all the required fields to create a professor
+     * @return Professor
+     * @throws EmailExistException Email already exist
+     */
     @Override
     public Professor addProfessor(Professor professor) throws EmailExistException {
         if(userRepository.existsByEmail(professor.getEmail()))
