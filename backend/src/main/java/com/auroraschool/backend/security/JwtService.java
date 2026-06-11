@@ -27,7 +27,50 @@ import java.util.Map;
 // Functional Interface
 import java.util.function.Function;
 
-
-
+/**
+ * Service for JWT.
+ */
+@Service // Marks class
 public class JwtService {
+    @Value("${application.security.jwt.secret-key:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}")
+    private String secretKey;
+
+    public String extractUsername(String token){
+        return extractClaim(token, Claims::getSubject);
+    }
+
+    private Key getSignInKey(){
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    private Claims extractAllClaims(String token){
+        return Jwts.parserBuilder().setSigningKey(getSignInKey()).build().parseClaimsJws(token).getBody();
+    }
+
+    public <T> T extractClaim(String token, Function<Claims,T> claimsResolver){
+        final Claims claim = extractAllClaims(token);
+        return claimsResolver.apply(claim);
+    }
+
+    public String generateToken(UserDetails userDetails){
+        return generateToken(new HashMap<>(), userDetails);
+    }
+
+    private String generateToken(Map<String, Object> extraClaims, UserDetails userDetails){
+        return Jwts.builder().setClaims(extraClaims).setSubject(userDetails.getUsername()).setIssuedAt(new Date(System.currentTimeMillis())).setExpiration(new Date(System.currentTimeMillis() + 1000 *60 *24)).signWith(getSignInKey(), SignatureAlgorithm.HS256).compact();
+    }
+
+    private Date extractExpiration(String token){
+        return extractClaim(token, Claims::getExpiration);
+    }
+
+    private boolean isTokenExpired(String token){
+        return extractExpiration(token).before(new Date());
+    }
+
+    private boolean isTokenValid(String token, UserDetails userDetails){
+        final String username = extractUsername(token);
+        return (username.equals(userDetails.getUsername()))  && !isTokenExpired(token);
+    }
 }
