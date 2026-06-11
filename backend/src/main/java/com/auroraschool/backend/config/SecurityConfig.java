@@ -17,10 +17,24 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 // Represents the chain of security filters that every incoming HTTP request must pass through.
 import org.springframework.security.web.SecurityFilterChain;
 
+/**
+ * Main Security Configuration Class
+ * Configures Http rules, endpoints permission and  session  management
+ * to establish a stateless, token-based security environment
+ */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
+    /**
+     *Configures the main security filter chain for all HTTP requests.
+     * Disables CSRF protection since JWT are immune
+     * Defines access rules for different URL patterns
+     * Configures how the application manages user sessions.
+     * @param http HttpSecurity Object used to build security Configurations
+     * @return The build SecurityFilterChain
+     * @throws Exception If an error occurs while configuring the security chain.
+     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
