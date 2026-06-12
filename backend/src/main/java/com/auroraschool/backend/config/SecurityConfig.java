@@ -1,6 +1,8 @@
 package com.auroraschool.backend.config;
 
 // Allows the definition of Beans inside configuration classes.
+import com.auroraschool.backend.security.JwtAuthFilter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 // Marks this class as a source of bean definitions to be processed by the Spring container during startup.
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +18,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 // Represents the chain of security filters that every incoming HTTP request must pass through.
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
  * Main Security Configuration Class
@@ -25,7 +28,10 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+    private final JwtAuthFilter jwtAuthFilter;
+
     /**
      *Configures the main security filter chain for all HTTP requests.
      * Disables CSRF protection since JWT are immune
@@ -46,9 +52,8 @@ public class SecurityConfig {
                                 .anyRequest()
                                 .authenticated())
                 .sessionManagement(sess -> sess
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
-        //TODO JWT-Filter
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 }
