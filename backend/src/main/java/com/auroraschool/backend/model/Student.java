@@ -1,9 +1,5 @@
 package com.auroraschool.backend.model;
-/*
- * Package provides the necessary annotations used to define the relational
- * mapping between this Java Class and underlying ProgressSql Database via
- * the Persistence Provider
- */
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,29 +8,47 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Entity representing a Student in the Aurora School system. This class extends the abstract User class.
- * It includes specific attributes and relationships relevant to students, such as enrollment number and the courses they are enrolled in.
+ * Database entity representing a Student within the Aurora School system.
+ * <p>
+ * This class extends the abstract {@link User} base class using a joined inheritance strategy,
+ * as indicated by the {@link PrimaryKeyJoinColumn} annotation linking it back to the core user table.
+ * It tracks student-specific registration identities and maintains a collection of active
+ * course enrollments.
+ * </p>
+ *
+ * @author Driton Jasiqi
+ * @see User
+ * @see Entity
+ * @see Table
+ * @see Enrollment
  */
 @Entity
 @Table(name = "students")
 @Getter
 @Setter
 @PrimaryKeyJoinColumn(name = "user_id")
-public class Student extends User{
+public class Student extends User {
+
     /**
-     * Unique enrollmentNumber for students that will get used to enroll Classes.
+     * Unique academic identification number assigned to the student.
+     * <p>
+     * This field is used as a primary administrative key for processing course registrations
+     * and academic lookups. It enforces both {@code unique} and {@code nullable = false}
+     * constraints at the database schema layer.
+     * </p>
      */
     @Column(unique = true, nullable = false)
     private Long enrollmentNumber;
 
     /**
-     * A List of Enrollment associated with this student
-     * This field represents a one-to-many Relationship. One user can have many Enrollments
-     * All lifecycle operations (persist, remove, refresh, merge)
-     * applied to this user will automatically propagate to the associated {@code Enrollment} objects.
-     * mappedByStudent indicates that student field in Enrollemnt table owns the Relationship
-     * If an Enrollments is removed in this list it will get removen also in Database
+     * The collection of registration records associated with this student.
+     * <p>
+     * Implements a bidirectional one-to-many relationship mapped by the {@code student} field
+     * within the child {@link Enrollment} entity. State modifications cascade entirely down to
+     * child rows ({@link CascadeType#ALL}), and orphaned database entries are automatically purged
+     * from persistent storage if removed from this collection ({@code orphanRemoval = true}).
+     * </p>
      */
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "student", orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "student", orphanRemoval = true)
     private List<Enrollment> courses = new ArrayList<>();
 }

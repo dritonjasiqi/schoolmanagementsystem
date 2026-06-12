@@ -1,10 +1,5 @@
 package com.auroraschool.backend.model;
 
-/*
- * Package provides the necessary annotations used to define the relational
- * mapping between this Java Class and underlying ProgressSql Database via
- * the Persistence Provider
- */
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,9 +10,18 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Entity representing a Course in the Aurora School system. This class extends the abstract User class.
- * It includes specific attributes relevant to course, such as name and price.
- * It includes specific relationship to the professor that manage the course and the students enrolled in it.
+ * Database entity representing a Course within the Aurora School system.
+ * <p>
+ * This class tracks core educational offerings, managing foundational attributes such as
+ * pricing structures and titles. It serves as a central relational hub linking the managing
+ * {@link Professor} to the collection of active student {@link Enrollment} records.
+ * </p>
+ *
+ * @author Driton Jasiqi
+ * @see Entity
+ * @see Table
+ * @see Professor
+ * @see Enrollment
  */
 @Entity
 @Table(name = "courses")
@@ -26,38 +30,51 @@ import java.util.UUID;
 public class Course {
 
     /**
-     * Unique identifier for the course, generated automatically as a UUID.
-     * This serves as the primary key for the course entity.
+     * Unique identifier for the course, automatically generated as a {@link UUID}.
+     * This field serves as the primary key within the underlying relational table.
      */
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     /**
-     * The name of the course, which is a required field and cannot be null in the database.
+     * The title or designation of the course. This field is required and cannot be null.
      */
     @Column(nullable = false)
     private String name;
 
     /**
-     * The price of the course, which is a required field and cannot be null in the database. It uses BigDecimal to ensure precision for monetary values.
+     * The financial cost of the course.
+     * <p>
+     * Utilizes {@link BigDecimal} to guarantee absolute fixed-point precision for monetary math.
+     * It is mapped with a precision of 10 digits and a scale of 2 decimal places (e.g., 99999999.99),
+     * and cannot be null.
+     * </p>
      */
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
 
     /**
-     * The professor who manages this course.
-     * This field represents a many-to-one relationship where one professor can teach many courses.
+     * The faculty member responsible for organizing and instructing this course.
+     * <p>
+     * This establishes a many-to-one mapping back to the {@link Professor} entity via the
+     * {@code professor_id} foreign key column. It uses {@link FetchType#LAZY} loading to optimize
+     * database query overhead, fetching relation data only when explicitly accessed.
+     * </p>
      */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name= "professor_id", nullable = false)
+    @JoinColumn(name = "professor_id", nullable = false)
     private Professor professor;
 
     /**
-     * A list of enrollments for this course.
-     * This field represents a one-to-many relationship where one course can have many student enrollments.
-     * Changes to enrollments are automatically cascaded and orphaned enrollments are removed.
+     * The collection of student registrations linked to this course.
+     * <p>
+     * Implements a bidirectional one-to-many relationship mapped by the {@code course} field
+     * within the child {@link Enrollment} entity. State modifications cascade entirely down to
+     * child rows ({@link CascadeType#ALL}), and orphaned database entries are automatically purged
+     * from persistent storage if removed from this collection.
+     * </p>
      */
-    @OneToMany(mappedBy = "course",cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Enrollment> enrollments = new ArrayList<>();
 }

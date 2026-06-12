@@ -1,10 +1,5 @@
 package com.auroraschool.backend.model;
 
-/*
- * Package provides the necessary annotations used to define the relational
- * mapping between this Java Class and underlying ProgressSql Database via
- * the Persistence Provider
- */
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,33 +7,51 @@ import lombok.Setter;
 import java.util.List;
 
 /**
- * Entity representing a Professor in the Aurora School system. This class extends the abstract User class.
- * It includes specific attributes and relationships relevant to professor, such as personalEmail, cvUrl and the courses they manage.
+ * Database entity representing a Professor within the Aurora School system.
+ * <p>
+ * This class extends the abstract {@link User} base class using a joined inheritance strategy,
+ * tracking faculty-specific attributes such as external contact emails and academic curricula vitae.
+ * It serves as an active relationship root for associated registration lifecycle configurations.
+ * </p>
+ *
+ * @author Driton Jasiqi
+ * @see User
+ * @see Entity
+ * @see Table
  */
 @Entity
 @Table(name = "professors")
 @PrimaryKeyJoinColumn(name = "user_id")
 @Getter
 @Setter
-public class  Professor extends User{
+public class Professor extends User {
+
     /**
-     * unique , personalEmail of the Professor , used for authentification
+     * The unique personal email address belonging to the professor.
+     * <p>
+     * Used primarily for external communications, multi-factor backup parameters, or
+     * cross-system verification. This column enforces a unique constraint at the database layer.
+     * </p>
      */
     @Column(unique = true)
     private String personalEmail;
 
     /**
-     * Optional,  Url of the professor CV in Cloud. Used for Student doubts about the course.
+     * An optional cloud storage URL pointing to the professor's academic Curriculum Vitae (CV).
+     * <p>
+     * This field is public-facing and provides students with visibility into the instructor's
+     * professional and research background prior to or during course instruction.
+     * </p>
      */
     private String cvUrl;
 
     /**
-     * A List of Enrollment managed by this Professor.
-     * This field represents a one-to-many Relationship. One Professor can manage many Enrollments
-     * All lifecycle operations (persist, remove, refresh, merge)
-     * applied to this user will automatically propagate to the associated {@code Enrollment} objects.
-     * mappedByProfessor indicates that professor field in Enrollemnt table owns the Relationship
-     * If an Enrollments is removed in this list it will get removen also in Database
+     * The collection of enrollment context entries associated with this professor.
+     * <p>
+     * Establishes a bidirectional one-to-many relationship mapped by the {@code professor} field
+     * within the child entity. State mutations, including persistence and deletion routines,
+     * cascade entirely down to the related rows via {@link CascadeType#ALL}.
+     * </p>
      */
     @OneToMany(mappedBy = "professor", cascade = CascadeType.ALL)
     private List<Enrollment> courses;

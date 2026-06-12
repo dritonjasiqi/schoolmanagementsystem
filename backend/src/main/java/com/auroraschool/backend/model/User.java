@@ -1,76 +1,98 @@
 package com.auroraschool.backend.model;
-/*
-* Package provides the necessary annotations used to define the relational
-* mapping between this Java Class and underlying ProgressSql Database via
-* the Persistence Provider
-*/
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
-import java.time.LocalDate;
-
 /**
- * Abstract base entity that represent a system user
- * This class serves as foundation for all user types (Student, Professor, Admin) in the
- * application. It uses the {@link InheritanceType#JOINED} strategy to allow for flexible and efficient
- * storage of common user attributes while enabling specific fields for each user type in their respective tables.
+ * Abstract base database entity representing a structural User within the Aurora School system.
+ * <p>
+ * This class serves as the foundational root for all localized user sub-types (such as {@code Student},
+ * {@code Professor}, and {@code Admin}). It leverages the {@link InheritanceType#JOINED} mapping strategy
+ * to organize common security and profile data within a single core table, while cleanly segregating
+ * specialized sub-type attributes into their own distinct tables via primary key references.
+ * </p>
+ *
+ * @author Driton Jasiqi
+ * @see Entity
+ * @see Table
+ * @see Inheritance
+ * @see Roles
  */
 @Entity
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.JOINED)
 @Getter
 @Setter
-abstract public class User {
+public abstract class User {
 
     /**
-     * Unique identifier for the user, generated automatically as a UUID.
-     * This serves as the primary key for the user entity.
+     * Unique operational token representing the user instance, automatically generated as a {@link UUID}.
+     * This field serves as the primary key within the central user management table.
      */
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     /**
-        * Unique email address for the user, used for authentication and identification.
+     * The unique identity email address assigned to the account.
+     * <p>
+     * Utilized as the primary identifier during authentication handshakes. Enforces both
+     * {@code unique = true} and {@code nullable = false} constraints at the relational schema layer.
+     * </p>
      */
-    @Column(unique = true,nullable = false)
+    @Column(unique = true, nullable = false)
     private String email;
 
     /**
-     * Encrypted password for the user authentication.
-     * It uses a secure self-made hashing mechanism to
-     * ensure that the password is stored securely in the database.
+     * The encrypted credential string utilized during login verification routines.
+     * <p>
+     * Stored strictly in an obscured state utilizing a secure cryptographic hashing mechanism
+     * to protect user data. This column is mandatory and cannot be null.
+     * </p>
      */
     @Column(nullable = false)
     private String password;
 
     /**
-     * The full name of the user.
+     * The full name (given name and surname) associated with the user account profile.
      */
     private String fullName;
+
     /**
-     * Date of birth of the user, used for age verification and other age-related functionalities within the application.
+     * The legal date of birth of the user, evaluated internally for age verification workflows
+     * and age-restricted application functionalities.
      */
     private LocalDate dateOfBirth;
+
     /**
-     * Profile picture URL for the user, allowing them to personalize their profile within the application.
-     * This field is optional and can be null if the user has not set a profile picture.
+     * A remote resource URL pointing to the user's uploaded avatar or profile image.
+     * <p>
+     * This parameter is optional and defaults to {@code null} if the account holder has not
+     * personalized their system visualization assets.
+     * </p>
      */
     private String profilePhotoUrl;
 
     /**
-     * Verification status of the user account. This indicates of user can login or not.
-     * Default value is {@code false}
-     * Verification Process is done by email confirmation link valid for 7 days
+     * Administrative status flag tracking whether the user account is validated and active.
+     * <p>
+     * Accounts default to a locked or unverified state ({@code false}) upon registration.
+     * Activation is updated following a successful email verification process via a token link
+     * valid for a 7-day processing window.
+     * </p>
      */
     private boolean isVerified = false;
 
     /**
-     * Role of the user, stored as String
-     * Indicate the thing a user can and cannot do.
+     * The main application security access tier role assigned to the user.
+     * <p>
+     * Persisted inside the relational table using {@link EnumType#STRING} to map logical
+     * permissions and structural access tokens securely. This column cannot be null.
+     * </p>
      */
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

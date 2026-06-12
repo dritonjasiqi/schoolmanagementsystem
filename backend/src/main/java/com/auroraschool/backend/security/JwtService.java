@@ -1,128 +1,166 @@
 package com.auroraschool.backend.security;
 
-//Represents the "Payload" of the token. Contains the actual Data
 import io.jsonwebtoken.Claims;
-// Main Jwt Class. Used to create or parse
 import io.jsonwebtoken.Jwts;
-//Cryptographic algorithm for token security
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
-//Takes Bytes from Decoder and create a secure Key Object, JJWT uses it for signing the token
 import io.jsonwebtoken.security.Keys;
-
-//Allows you to inject properties directly from your application.properties
 import org.springframework.beans.factory.annotation.Value;
-// Spring Security's core user interface.
-// When a professor, student, or admin logs in, Spring represents them as a UserDetails object.
 import org.springframework.security.core.userdetails.UserDetails;
-//Register class as Bean
 import org.springframework.stereotype.Service;
 
-//cryptographic key for signing the token, stored as a Base64-encoded string in application.properties
 import java.security.Key;
 import java.util.Date;
-// Data Structure with keys and values
 import java.util.HashMap;
 import java.util.Map;
-// Functional Interface
 import java.util.function.Function;
 
 /**
- * Service for handling JSON Web Token (JWT) operations, including
- * parsing, generation, and validation for secure user authentication.
+ * Service handling operations for JSON Web Tokens (JWT), including creation,
+ * signature validation, and claims parsing for secure user authentication.
+ * <p>
+ * This bean encapsulates the application's cryptographic routines. It processes
+ * standard claims such as token subjects and expiration offsets, mapping them
+ * against Spring Security's structural {@link UserDetails} contract to protect
+ * stateless endpoint transactions.
+ * </p>
+ *
+ * @author Driton Jasiqi
+ * @see Service
+ * @see Jwts
+ * @see Claims
+ * @see UserDetails
  */
-@Service // Marks class
+@Service
 public class JwtService {
 
     /**
-     * Secret Key. Only for Testing. Real World Application should be handled with an environment variable.
+     * Secret cryptographic key used to sign and verify generated tokens.
+     * <p>
+     * Loaded as a Base64-encoded string parameter from the externalized
+     * {@code application.properties} configuration layer. It falls back to a
+     * hardcoded test string if no explicit environment variable is declared.
+     * </p>
      */
     @Value("${application.security.jwt.secret-key:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}")
     private String secretKey;
 
     /**
-     * Extract the username from the provided JWT
-     * @param token JWT Token
-     * @return username contained in Token
+     * Extracts the primary identification username (subject) encoded inside a given JWT.
+     *
+     * @param token the raw JWT token string to evaluate
+     * @return the username subject embedded within the token payload
      */
-    public String extractUsername(String token){
+    public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
     /**
-     * Decodes the secret Key and generates a signing key for Verification of the token
-     * @return Cryptographic Key Object
+     * Decodes the configured Base64 secret key string and wraps it into a proper cryptographic object.
+     * <p>
+     * The resulting {@link Key} is utilized by underlying algorithms to structurally verify
+     * token authenticity and validate payload contents against tamper vectors.
+     * </p>
+     *
+     * @return a concrete {@link Key} object optimized for HMAC-SHA signature verifications
      */
-    private Key getSignInKey(){
+    private Key getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
     /**
-     * Parses the token to retrieve all claims stored within.
-     * @param token JWT Token
-     * @return Claims set from the token
+     * Compiles and decrypts a target token string to reveal its full inner claims payload.
+     *
+     * @param token the signed cryptographic JWT string to parse
+     * @return the complete {@link Claims} descriptor dictionary extracted from the token body
      */
-    private Claims extractAllClaims(String token){
-        return Jwts.parserBuilder().setSigningKey(getSignInKey()).build().parseClaimsJws(token).getBody();
+    private Claims extractAllClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(getSignInKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 
     /**
-     * Extracts a specific claim from the token with help of a functional Interface
-     * @param token JWT token
-     * @param claimsResolver Function to extract the specific claim
-     * @return The requested claim
+     * Extracts a specialized singular claim descriptor from a token using a functional resolver mapping.
+     *
+     * @param <T>            the generic type structure of the expected output target
+     * @param token          the raw signed token string to parse
+     * @param claimsResolver a functional {@link Function} interface mapping compiled claims onto type T
+     * @return the calculated evaluation value of the targeted claim parameter
      */
-    public <T> T extractClaim(String token, Function<Claims,T> claimsResolver){
+    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claim = extractAllClaims(token);
         return claimsResolver.apply(claim);
     }
 
     /**
-     * Generates a new Token for the specified user details
-     * @param userDetails The user to generate the Token for
-     * @return A signed JWT string
+     * Generates a baseline security token for an authenticated user context profile.
+     *
+     * @param userDetails the core identity record representing the active user account
+     * @return a signed, standard JWT authorization string
      */
-    public String generateToken(UserDetails userDetails){
+    public String generateToken(UserDetails userDetails) {
         return generateToken(new HashMap<>(), userDetails);
     }
 
     /**
-     * Internal method to generate a token with optional extra claims.
-     * @param extraClaims A map of additional claims to include in the token.
-     * @param userDetails The user details.
-     * @return A signed JWT string.
-    */
-    private String generateToken(Map<String, Object> extraClaims, UserDetails userDetails){
-        return Jwts.builder().setClaims(extraClaims).setSubject(userDetails.getUsername()).setIssuedAt(new Date(System.currentTimeMillis())).setExpiration(new Date(System.currentTimeMillis() + 1000 *60 *24)).signWith(getSignInKey(), SignatureAlgorithm.HS256).compact();
+     * Compiles a custom, signed JSON Web Token holding standard parameters alongside
+     * structural custom properties.
+     * <p>
+     * Appends the user's username as the token subject, establishes generation and expiration
+     * timestamps, and seals the final payload string utilizing the {@link SignatureAlgorithm#HS256}
+     * algorithm specification.
+     * </p>
+     *
+     * @param extraClaims  a {@link Map} containing key-value metadata parameters to embed inside the token body
+     * @param userDetails the core identity context tracking the system entity
+     * @return a fully compacted and cryptographically sealed token string
+     */
+    private String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+        return Jwts.builder()
+                .setClaims(extraClaims)
+                .setSubject(userDetails.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
+                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+                .compact();
     }
 
     /**
-     * Extract the expiration Date from the Token
-     * @param token JWT Token
-     * @return Expiration Date
+     * Extracts the specific system runtime timeout timestamp bound to a given token string.
+     *
+     * @param token the raw signed token string to parse
+     * @return the precise {@link Date} tracking when this token loses system validity
      */
-    private Date extractExpiration(String token){
+    private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 
     /**
-     * Checks if the token has expired
-     * @param token JWT Token
-     * @return True if token is expired, orElse False
+     * Determines whether a given token has surpassed its assigned session expiration timestamp.
+     *
+     * @param token the raw signed token string to check
+     * @return {@code true} if the current system clock is past the token's expiration date;
+     * {@code false} otherwise
      */
-    public boolean isTokenExpired(String token){
+    public boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
     /**
-     * Checks if the token belongs to the User and hasnt expired
-     * @param token JWT Token
-     * @param userDetails The user in which will be applied the Validation
-     * @return True if valid, orElse False
+     * Validates whether a token is structurally sound, unexpired, and explicitly bound to a
+     * matching user context.
+     *
+     * @param token       the raw signed token string to evaluate
+     * @param userDetails the core user record to test against the token's embedded data contents
+     * @return {@code true} if the token subject matches the user credentials and the expiration window
+     * remains open; {@code false} if any check fails
      */
-    public boolean isTokenValid(String token, UserDetails userDetails){
+    public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()))  && !isTokenExpired(token);
+        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
 }
