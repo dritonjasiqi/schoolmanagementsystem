@@ -111,7 +111,7 @@ public class JwtService {
      * @param token JWT Token
      * @return True if token is expired, orElse False
      */
-    private boolean isTokenExpired(String token){
+    public boolean isTokenExpired(String token){
         return extractExpiration(token).before(new Date());
     }
 
@@ -121,7 +121,7 @@ public class JwtService {
      * @param userDetails The user in which will be applied the Validation
      * @return True if valid, orElse False
      */
-    private boolean isTokenValid(String token, UserDetails userDetails){
+    public boolean isTokenValid(String token, UserDetails userDetails){
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()))  && !isTokenExpired(token);
     }
