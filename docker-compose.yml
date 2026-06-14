@@ -32,7 +32,7 @@ services:
     depends_on:                         # Wartet auf die Datenbank
       - db
 
-   frontend:
+  frontend:
     build: ./frontend                   # Erstellt Image aus dem Ordner ./frontend
     container_name: school-frontend     # Name des Containers
     ports:                              # Frontend über Port 5173 erreichbar
