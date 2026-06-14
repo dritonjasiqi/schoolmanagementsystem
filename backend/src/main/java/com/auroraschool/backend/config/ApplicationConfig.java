@@ -58,6 +58,7 @@ public class ApplicationConfig {
                     .username(user.getEmail())
                     .password(user.getPassword())
                     .roles(user.getRole().name())
+                    .disabled(!user.isVerified())
                     .build();
         };
     }
