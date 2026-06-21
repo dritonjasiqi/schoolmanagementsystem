@@ -8,6 +8,7 @@ import com.auroraschool.backend.exception.EmailExistException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.UUID;
 
@@ -45,6 +46,8 @@ public class UserServiceClass implements UserService {
      * Learner-specific data engine managing persistent records for students.
      */
     private final StudentRepository studentRepository;
+
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * Purges a user account completely from persistent storage based on its unique relational database token.
@@ -143,9 +146,9 @@ public class UserServiceClass implements UserService {
         if (userRepository.existsByEmail(student.getEmail())) {
             throw new EmailExistException("There already exist an account with that email. Please try a different one!");
         }
-        /*TODO Password Hashing*/
+        student.setPassword(passwordEncoder.encode(student.getPassword()));
         student.setRole(Roles.STUDENT);
-        student.setVerified(false);
+        student.setVerified(true); // TODO: Only for tests, Otherweis by default false
         return studentRepository.save(student);
     }
 
@@ -171,6 +174,7 @@ public class UserServiceClass implements UserService {
         if (userRepository.existsByEmail(professor.getEmail())) {
             throw new EmailExistException("There already exist an account with that email. Please try a different one!");
         }
+        professor.setPassword(passwordEncoder.encode(professor.getPassword()));
         professor.setRole(Roles.PROFESSOR);
         professor.setVerified(false);
         return professorRepository.save(professor);
