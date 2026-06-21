@@ -7,8 +7,7 @@ import { Google, Microsoft, Envelope, LockFill } from "react-bootstrap-icons";
 import myApi from "../api/axiosConfig"; // Unseren konfigurierten Axios-Client importieren
 
 export default function Signup() {
-    // 1. State-Variablen für unsere Formularfelder erstellen
-    const [fullName, setFullName] = useState('');
+const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
