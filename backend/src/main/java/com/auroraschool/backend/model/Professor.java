@@ -46,7 +46,7 @@ public class Professor extends User {
     private String cvUrl;
 
     /**
-     * The collection of enrollment context entries associated with this professor.
+     * The collection of course context entries associated with this professor.
      * <p>
      * Establishes a bidirectional one-to-many relationship mapped by the {@code professor} field
      * within the child entity. State mutations, including persistence and deletion routines,
@@ -54,5 +54,5 @@ public class Professor extends User {
      * </p>
      */
     @OneToMany(mappedBy = "professor", cascade = CascadeType.ALL)
-    private List<Enrollment> courses;
+    private List<Course> courses;
 }
