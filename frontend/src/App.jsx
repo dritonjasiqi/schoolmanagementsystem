@@ -4,7 +4,8 @@ import Dashboard from './pages/Dashboard';
 import Users from './pages/userpages/Users';
 import Settings from './pages/Settings';
 import Home from './pages/Home';
-import LoginAndSignup from './pages/LoginAndSignup';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
 import Pricing from './pages/Pricing';
 import AboutUs from './pages/AboutUs';
 import AddProfessor from './pages/userpages/AddProfessor';
@@ -37,7 +38,8 @@ export default function App() {
         <Route path="/classes/removeClass/:id" element={<RemoveClass />} />
         <Route path="/userpages/editProfessor/:id" element={<EditProfessor />} />
         <Route path="/userpages/removeProfessor/:id" element={<RemoveProfessor />} />
-        <Route path="/login" element={<LoginAndSignup />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/aboutus" element={<AboutUs />} />
 
