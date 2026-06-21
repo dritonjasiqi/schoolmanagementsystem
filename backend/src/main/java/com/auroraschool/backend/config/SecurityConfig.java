@@ -11,6 +11,11 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 /**
  * Main Security Configuration Class.
@@ -40,6 +45,7 @@ public class SecurityConfig {
      * <p>
      * This method applies the following core security behaviors:
      * <ul>
+     * <li>Enables CORS with a custom configuration source to allow cross-origin requests from trusted origins.</li>
      * <li>Disables CSRF (Cross-Site Request Forgery) protection, as the application uses stateless JWTs.</li>
      * <li>Defines access control rules, allowing public access to authentication endpoints while securing all other routes.</li>
      * <li>Enforces a stateless session management policy (no HTTP sessions are created or maintained).</li>
@@ -54,6 +60,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         auth -> auth
@@ -65,5 +72,29 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
+    }
+
+    /**
+     * Configures Cross-Origin Resource Sharing (CORS) for the application.
+     * <p>
+     * This bean defines a {@link CorsConfigurationSource} that permits a specific origin
+     * (e.g., a local frontend development server running on port 3000) to safely interact
+     * with the backend APIs. It specifies the allowed HTTP methods, headers, and enables
+     * the transmission of authentication credentials (cookies, authorization headers, etc.).
+     * </p>
+     *
+     * @return a configured {@link UrlBasedCorsConfigurationSource} applying these CORS
+     * rules across all application paths ({@code "/**"})
+     */
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowedOrigins(List.of("http://localhost:3000"));
+        corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        corsConfiguration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        corsConfiguration.setAllowCredentials(true);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfiguration);
+        return source;
     }
 }
