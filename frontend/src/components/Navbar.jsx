@@ -1,14 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Navbar as BootstrapNavbar, Container, Nav, Button } from "react-bootstrap";
+import { useLocation } from "react-router-dom";
 
 export default function Navbar() {
     const [isNavCollapsed, setIsNavCollapsed] = useState(true);
-    const [currentPath, setCurrentPath] = useState("");
-
-    // Grabs the current page path when the component mounts
-    useEffect(() => {
-        setCurrentPath(window.location.pathname);
-    }, []);
+    const location = useLocation();
+    const currentPath = location.pathname;
 
     const handleNavCollapse = () => setIsNavCollapsed(!isNavCollapsed);
 
@@ -58,9 +55,15 @@ export default function Navbar() {
                             </Nav.Link>
                         </Nav.Item>
                         
+                        <Nav.Item className="me-2 mt-2 mt-lg-0">
+                            <Button href="/login" variant="outline-primary" className="px-4 py-2 btn-modern fw-semibold shadow-sm">
+                                <i className="bi bi-person-circle me-2"></i>Login
+                            </Button>
+                        </Nav.Item>
+
                         <Nav.Item className="mt-2 mt-lg-0">
-                            <Button href="/login" variant="primary" className="px-4 py-2 btn-modern fw-semibold shadow-sm">
-                                <i className="bi bi-person-circle me-2"></i>Login / Sign Up
+                            <Button href="/signup" variant="primary" className="px-4 py-2 btn-modern fw-semibold shadow-sm">
+                                Sign Up
                             </Button>
                         </Nav.Item>
                     </Nav>
