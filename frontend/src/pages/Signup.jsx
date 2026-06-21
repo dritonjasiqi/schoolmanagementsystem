@@ -1,10 +1,57 @@
-import React from "react";
-import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import React, { useState } from "react";
+import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
+import { useNavigate } from "react-router-dom"; // Um zum Login zu wechseln
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { Google, Microsoft, Envelope, LockFill } from "react-bootstrap-icons";
+import myApi from "../api/axiosConfig"; // Unseren konfigurierten Axios-Client importieren
 
 export default function Signup() {
+    // 1. State-Variablen für unsere Formularfelder erstellen
+    const [fullName, setFullName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    
+    // Status-Meldungen (Erfolg oder Fehler)
+    const [errorMsg, setErrorMsg] = useState('');
+    const [successMsg, setSuccessMsg] = useState('');
+    
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e) => {
+        e.preventDefault(); 
+        setErrorMsg('');
+        setSuccessMsg('');
+
+        // Passwörter vergleichen
+        if (password !== confirmPassword) {
+            setErrorMsg("Passwords do not match!");
+            return;
+        }
+
+        try {
+            await myApi.post('/auth/register/Student', {
+                fullName: fullName,
+                email: email,
+                password: password,
+                enrollmentNumber: Math.floor(Math.random() * 1000000) 
+            });
+            setSuccessMsg("Registration successful! Redirecting to login...");
+            setTimeout(() => {
+                navigate('/login');
+            }, 2000);
+
+        } catch (error) {
+            if (error.response && error.response.status === 409) {
+                setErrorMsg("This email is already registered. Please login.");
+            } else {
+                setErrorMsg("Registration failed. Please try again later.");
+            }
+            console.error("Signup error:", error);
+        }
+    };
+
     return (
         <div>
             <Navbar />
@@ -17,10 +64,21 @@ export default function Signup() {
                                 <p className="text-muted">Create an account to get started.</p>
                             </div>
 
-                            <Form className="shadow-sm p-4 p-md-5 rounded-4 border bg-light">
+                            {errorMsg && <Alert variant="danger">{errorMsg}</Alert>}
+                            {successMsg && <Alert variant="success">{successMsg}</Alert>}
+
+                            <Form className="shadow-sm p-4 p-md-5 rounded-4 border bg-light" onSubmit={handleSubmit}>
+                                
                                 <Form.Group className="mb-3" controlId="fullName">
                                     <Form.Label className="fw-bold">Full Name</Form.Label>
-                                    <Form.Control type="text" placeholder="Enter your full name" />
+                                    {/* Den Wert aus dem State auslesen und bei Änderung aktualisieren */}
+                                    <Form.Control 
+                                        type="text" 
+                                        placeholder="Enter your full name" 
+                                        value={fullName}
+                                        onChange={(e) => setFullName(e.target.value)}
+                                        required 
+                                    />
                                 </Form.Group>
 
                                 <Form.Group className="mb-3" controlId="email">
@@ -28,7 +86,13 @@ export default function Signup() {
                                         <Envelope className="m-2 fs-5" />
                                         Email address
                                     </Form.Label>
-                                    <Form.Control type="email" placeholder="Enter your email" />
+                                    <Form.Control 
+                                        type="email" 
+                                        placeholder="Enter your email" 
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        required 
+                                    />
                                 </Form.Group>
 
                                 <Form.Group className="mb-3" controlId="password">
@@ -36,12 +100,24 @@ export default function Signup() {
                                         <LockFill className="m-2 fs-5" />
                                         Password
                                     </Form.Label>
-                                    <Form.Control type="password" placeholder="Create a password" />
+                                    <Form.Control 
+                                        type="password" 
+                                        placeholder="Create a password" 
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        required 
+                                    />
                                 </Form.Group>
 
                                 <Form.Group className="mb-3" controlId="confirmPassword">
                                     <Form.Label className="fw-bold">Confirm Password</Form.Label>
-                                    <Form.Control type="password" placeholder="Confirm your password" />
+                                    <Form.Control 
+                                        type="password" 
+                                        placeholder="Confirm your password" 
+                                        value={confirmPassword}
+                                        onChange={(e) => setConfirmPassword(e.target.value)}
+                                        required 
+                                    />
                                 </Form.Group>
 
                                 <div className="d-flex justify-content-end mb-3">
