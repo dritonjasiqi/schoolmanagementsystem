@@ -8,13 +8,17 @@ import com.auroraschool.backend.security.JwtService;
 import com.auroraschool.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseCookie;
+import org.springframework.http.HttpHeaders;
 
 /**
  * REST controller exposing Authentication-related endpoints under {@code /api/auth}.
@@ -96,35 +100,42 @@ public class AuthController {
     private final UserDetailsService userDetailsService;
 
     /**
-     * Authenticates incoming credentials and returns a stateless JSON Web Token (JWT) on success.
+     * Authenticates a user credential and issues a secure JWT cookie upon success.
      * <p>
-     * <b>Operational Routine:</b>
-     * <ol>
-     * <li>Wraps the user's plain credentials into an unauthenticated {@link UsernamePasswordAuthenticationToken}.</li>
-     * <li>Hands execution to the {@link AuthenticationManager}. If credentials match the hashed
-     * database record, processing completes cleanly; otherwise, an internal exception drops into the catch block.</li>
-     * <li>Upon successful validation, loads the corresponding user entity details out of persistent storage.</li>
-     * <li>Seals the profile data into a compacted JWT bearer token and flushes it back to the client.</li>
-     * </ol>
+     * This method processes the login request by validating the provided email and
+     * password against the authentication manager. If authentication is successful,
+     * it extracts the user details, generates a JSON Web Token (JWT), and encapsulates
+     * it within a secure, {@code HttpOnly} cookie.
      * </p>
      *
-     * @param request a {@link LoginRequest} data transfer record holding the raw email and password strings
-     * @return a {@link ResponseEntity} containing the signed JWT string wrapped in a standard HTTP 200 OK block,
-     * or an HTTP 401 Unauthorized status message if verification checks fail
+     * @param request the {@link LoginRequest} data transfer object containing the user's email and password.
+     * @return a {@link ResponseEntity} with an HTTP 200 status, the {@code Set-Cookie} header,
+     * and a success message if authenticated, or an HTTP 401 Unauthorized status if authentication fails.
      */
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginRequest request) {
         try {
-            authenticationManager.authenticate(
+            Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.email(), request.password())
             );
-        } catch (Exception e) {
+
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            final String jwt = jwtService.generateToken(userDetails);
+
+            ResponseCookie jwtCookie = ResponseCookie.from("jwt_token", jwt)
+                    .httpOnly(true)
+                    .secure(false)
+                    .path("/")
+                    .maxAge(15 * 60)
+                    .sameSite("Lax")
+                    .build();
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+                    .body("Login Successful");
+
+        } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Credentials");
         }
-
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(request.email());
-        final String jwt = jwtService.generateToken(userDetails);
-
-        return ResponseEntity.ok(jwt);
     }
 }
