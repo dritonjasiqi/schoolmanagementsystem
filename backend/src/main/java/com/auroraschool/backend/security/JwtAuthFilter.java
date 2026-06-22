@@ -4,6 +4,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Cookie;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * Custom JWT Authentication Filter that intercepts incoming HTTP requests to validate
@@ -46,28 +48,24 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private final UserDetailsService userDetailsService;
 
     /**
-     * Intercepts the HTTP request pipeline to verify incoming JWT bearer strings and set the
-     * authentication context.
+     * Intercepts incoming HTTP requests to validate and process JSON Web Tokens (JWT)
+     * for user authentication.
      * <p>
-     * <b>Operational Workflow:</b>
+     * This method executes once per request. It attempts to extract a JWT from either:
      * <ol>
-     * <li>Inspects the incoming {@code Authorization} request header for a valid "Bearer " token string template.</li>
-     * <li>If absent, hands processing immediately over to the subsequent filter down the chain.</li>
-     * <li>Extracts the raw token content and evaluates the associated username signature.</li>
-     * <li>If a valid identity is resolved and the application context lacks active authentication details,
-     * it invokes the {@link UserDetailsService}.</li>
-     * <li>Validates whether the token remains structurally sound and matches the registered {@link UserDetails}.</li>
-     * <li>If valid, builds a new {@link UsernamePasswordAuthenticationToken}, attaches request metadata,
-     * and binds it directly inside the active {@link SecurityContextHolder}.</li>
-     * <li>Hands execution forward down the standard {@link FilterChain}.</li>
+     * <li>A cookie named {@code "jwt_token"} (primary source for web clients).</li>
+     * <li>The {@code Authorization} bearer header (fallback for APIs, Postman, or mobile clients).</li>
      * </ol>
+     * If a valid token is found and the user is not already authenticated within the
+     * current {@link SecurityContextHolder}, the user's details are loaded, verified,
+     * and a new {@link UsernamePasswordAuthenticationToken} is established in the security context.
      * </p>
      *
-     * @param request     the incoming {@link HttpServletRequest} profile containing header arrays
-     * @param response    the outbound {@link HttpServletResponse} execution pathway
-     * @param filterChain the foundational {@link FilterChain} driving the web container interception security rules
-     * @throws ServletException if a container-specific servlet processing exception occurs
-     * @throws IOException      if an input/output network error drops processing streams
+     * @param request     the incoming {@link HttpServletRequest} object containing client request details.
+     * @param response    the {@link HttpServletResponse} object used to pass responses back to the client.
+     * @param filterChain the {@link FilterChain} used to invoke the next filter in the security architecture.
+     * @throws ServletException if a servlet-specific error occurs during processing.
+     * @throws IOException      if an I/O exception occurs during the execution of the filter chain.
      */
     @Override
     protected void doFilterInternal(
@@ -76,20 +74,31 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain)
             throws ServletException, IOException {
 
-        final String authHeader = request.getHeader("Authorization");
-        final String jwt;
-        final String username;
+        String jwt = null;
+        String userEmail = null;
+        if (request.getCookies() != null) {
+            jwt = Arrays.stream(request.getCookies())
+                    .filter(cookie -> "jwt_token".equals(cookie.getName()))
+                    .map(Cookie::getValue)
+                    .findFirst()
+                    .orElse(null);
+        }
+        //POSTMAN
+        if (jwt == null) {
+            final String authHeader = request.getHeader("Authorization");
+            if (authHeader != null && authHeader.startsWith("Bearer ")) {
+                jwt = authHeader.substring(7);
+            }
+        }
 
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+
+        if (jwt == null) {
             filterChain.doFilter(request, response);
             return;
         }
-
-        jwt = authHeader.substring(7);
-        username = jwtService.extractUsername(jwt);
-
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+        userEmail = jwtService.extractUsername(jwt);
+        if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
 
             if (jwtService.isTokenValid(jwt, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
