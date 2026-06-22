@@ -11,8 +11,9 @@ const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/;
+    const isPasswordValid = passwordPattern.test(password);
     
-    // Status-Meldungen (Erfolg oder Fehler)
     const [errorMsg, setErrorMsg] = useState('');
     const [successMsg, setSuccessMsg] = useState('');
     
@@ -23,7 +24,11 @@ const [fullName, setFullName] = useState('');
         setErrorMsg('');
         setSuccessMsg('');
 
-        // Passwörter vergleichen
+        if (!isPasswordValid) {
+            setErrorMsg('Password must be at least 8 characters and include uppercase, lowercase, number, and symbol.');
+            return;
+        }
+
         if (password !== confirmPassword) {
             setErrorMsg("Passwords do not match!");
             return;
