@@ -17,8 +17,9 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.HttpHeaders;
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  * REST controller exposing Authentication-related endpoints under {@code /api/auth}.
@@ -104,16 +105,20 @@ public class AuthController {
      * <p>
      * This method processes the login request by validating the provided email and
      * password against the authentication manager. If authentication is successful,
-     * it extracts the user details, generates a JSON Web Token (JWT), and encapsulates
-     * it within a secure, {@code HttpOnly} cookie.
+     * it extracts the user details, generates a JSON Web Token (JWT), encapsulates
+     * it within a secure, {@code HttpOnly} cookie, and returns the user's profile information.
      * </p>
      *
      * @param request the {@link LoginRequest} data transfer object containing the user's email and password.
-     * @return a {@link ResponseEntity} with an HTTP 200 status, the {@code Set-Cookie} header,
-     * and a success message if authenticated, or an HTTP 401 Unauthorized status if authentication fails.
+     * @return a {@link ResponseEntity} containing:
+     * <ul>
+     * <li>An HTTP 200 OK status with the {@code Set-Cookie} header and a {@link Map}
+     * body holding the user's {@code email} and stripped {@code role} (e.g., "STUDENT").</li>
+     * <li>An HTTP 401 Unauthorized status with an error message string if authentication fails.</li>
+     * </ul>
      */
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.email(), request.password())
@@ -130,9 +135,14 @@ public class AuthController {
                     .sameSite("Lax")
                     .build();
 
+            Map<String,String> responseBody = new HashMap<>();
+            responseBody.put("email", userDetails.getUsername());
+            String role = userDetails.getAuthorities().iterator().next().getAuthority();
+            responseBody.put("role", role.replace("ROLE_", ""));
+
             return ResponseEntity.ok()
                     .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-                    .body("Login Successful");
+                    .body(responseBody);
 
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Credentials");
