@@ -23,10 +23,12 @@ export default function Login() {
         setSuccessMsg('');
 
         try {
-            await myApi.post('/auth/login', {
+            const response = await myApi.post('/auth/login', {
                 email: email,
                 password: password
             });
+            const userData = response.data;
+            localStorage.setItem('user', JSON.stringify(userData));
             setSuccessMsg("Login successful! Redirecting to dashboard...");
             setTimeout(() => {
                 navigate('/dashboard');
