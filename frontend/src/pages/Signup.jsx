@@ -52,7 +52,6 @@ const [fullName, setFullName] = useState('');
             } else {
                 setErrorMsg("Registration failed. Please try again later.");
             }
-            console.error("Signup error:", error);
         }
     };
 
