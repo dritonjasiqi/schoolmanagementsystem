@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
 import Users from './pages/userpages/Users';
@@ -17,6 +17,8 @@ import EditClass from './pages/classes/EditClass';
 import RemoveClass from './pages/classes/RemoveClass';
 import AddClass from './pages/classes/AddClass';
 import ProtectedRoute from './components/ProtectedRoute';
+import RequireRole from './components/RequireRole';
+import NotFound from './pages/NotFound';
 
 export default function App() {
   return (
@@ -34,16 +36,25 @@ export default function App() {
             <Route path="/dashboard/settings" element={<Settings />} />
             <Route path="/dashboard/products/*" element={<div className="p-4">Products Module</div>} />
             <Route path="/dashboard/reports/*" element={<div className="p-4">Reports Module</div>} />
-            <Route path="/dashboard/userpages/addProfessor" element={<AddProfessor />} />
-            <Route path="/dashboard/userpages/professors" element={<Professors />} />
+            <Route element={<RequireRole allowedRoles={['ADMIN']} />}>
+              <Route path="/dashboard/userpages/addProfessor" element={<AddProfessor />} />
+              <Route path="/dashboard/userpages/professors" element={<Professors />} />
+            </Route>
+            <Route element={<RequireRole allowedRoles={['ADMIN', 'PROFESSOR']} />}>
             <Route path="/dashboard/classes/classes" element={<Class />} />
             <Route path="/dashboard/classes/addClass" element={<AddClass />} />
+            </Route>
           </Route>
+          <Route element={<RequireRole allowedRoles={['ADMIN', 'PROFESSOR']} />}>
           <Route path="/classes/editClass/:id" element={<EditClass />} />
           <Route path="/classes/removeClass/:id" element={<RemoveClass />} />
+          </Route>
+          <Route element={<RequireRole allowedRoles={['ADMIN']} />}>
           <Route path="/userpages/editProfessor/:id" element={<EditProfessor />} />
           <Route path="/userpages/removeProfessor/:id" element={<RemoveProfessor />} />
+          </Route>
         </Route>
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );
